@@ -202,9 +202,9 @@
         /* Layout: Top Form Blocks */
         .top-form-grid {
             display: grid;
-            grid-template-columns: 1fr 200px 180px;
-            gap: 8px;
-            padding: 8px;
+            grid-template-columns: 280px 1fr 340px;
+            gap: 6px;
+            padding: 6px;
             background: #cbd5e1;
         }
 
@@ -308,6 +308,19 @@
             background-color: #f8fafc;
             color: #64748b;
             cursor: default;
+        }
+
+        /* Hide Number Spin Buttons for PC input */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
         }
 
         /* Main Content Split */
@@ -460,9 +473,9 @@
     <!-- System Info Bar -->
     <header class="system-bar">
         <div>
-            <strong>(비즈테크) For BizTech Edition Ver 0.1.6 (IME Ultimate)</strong> - 사용자: 관리자
+            <strong>(비즈테크) For BizTech Edition Ver 1.0.13 (Date Control)</strong> - 사용자: 관리자
         </div>
-        <div>2026-02-04 (수요일) | 온라인 지원 연동 중</div>
+        <div id="system-date-display">2026-02-05 (수요일) | 온라인 지원 연동 중</div>
     </header>
 
     <!-- Main Menu Bar -->
@@ -777,95 +790,185 @@
 
             <!-- Top Grid Layout -->
             <div class="top-form-grid">
-                <!-- Group 1: 거래처 정보 -->
-                <div class="group-box">
+                <!-- Group 1: 거래처 정보 (좌측) -->
+                <div class="group-box" style="flex:1;">
                     <div class="group-box-title">거래처 정보</div>
                     <div class="field-row">
                         <label>처리구분</label>
                         <select id="trade-type-select" onchange="switchTradeType(this.value)" style="flex:1;">
-                            <option value="sales">매출 등록</option>
-                            <option value="purchase">매입 등록</option>
+                            <option value="sales">매 출</option>
+                            <option value="purchase">매 입</option>
                         </select>
                         <select style="width:60px;">
                             <option>일반</option>
                         </select>
                     </div>
                     <div class="field-row">
-                        <label id="target-label">거 래 처</label>
-                        <input type="text" id="sales-customer-input" list="customer-list-dl" placeholder="거래처를 선택하세요"
-                            style="flex:none; width:300px;">
+                        <label>거 래 처</label>
+                        <input type="text" id="sales-customer-input" list="customer-list-dl" style="flex:1;">
                         <button style="font-size:10px; padding:2px 4px;">변경</button>
                     </div>
                     <div class="field-row">
-                        <label>담당자</label><input type="text" value="관리자">
-                        <label style="width:40px;">HP</label><input type="text">
+                        <label>담 당 자</label><input type="text" value="관리자" style="flex:1;">
                     </div>
                 </div>
 
-                <!-- Group 2: 과세 구분 -->
-                <div class="group-box">
-                    <div class="group-box-title">과세 구분</div>
-                    <div style="font-size:11px;">
-                        <label><input type="radio" name="tax-opt"> 세금계산서</label><br>
-                        <label><input type="radio" name="tax-opt" checked> 계산서</label><br>
-                        <label><input type="checkbox"> 세금계산서발행</label><br>
-                        <hr style="margin:4px 0;">
-                        <label><input type="radio" name="pay-type"> 영수</label>
-                        <label><input type="radio" name="pay-type" checked> 청구</label>
+                <!-- Group 2: 작성 정보 (중앙 - 신규 추가) -->
+                <div class="group-box" style="flex:1.2;">
+                    <div class="group-box-title">작성 정보</div>
+                    <div class="field-row">
+                        <label>작성거래처</label>
+                        <input type="text" id="sales-customer-input" list="customer-list-dl" autocomplete="off"
+                            style="flex:1; background:#fff; font-weight:bold; border:1px solid #475569;"
+                            oninput="updateCustomerHistory(this.value);" onclick="renderSalesGrid();">
+                        <label style="width:60px;">거래일자</label>
+                        <input type="date" id="trade-date-input" style="width:110px;" onchange="updateSystemDate();">
+                        <button style="font-size:10px; padding:2px 4px;" onclick="setTodayDate();">오늘</button>
+                    </div>
+                    <div class="field-row">
+                        <label>작성순번</label>
+                        <div style="display:flex; align-items:center; gap:2px; flex:1;">
+                            <input type="text" id="reg-seq" value="1" style="width:40px; text-align:center;">
+                            <button style="padding:0 4px;" onclick="changeSeq(-1)">◀</button><button
+                                style="padding:0 4px;" onclick="changeSeq(1)">▶</button>
+                        </div>
+                        <label style="width:60px;">작성시간</label>
+                        <input type="text" id="reg-time" value="22:45:01" style="width:70px; background:#f1f5f9;"
+                            readonly>
+                        <label style="width:60px;">전표번호</label>
+                        <input type="text" id="reg-no" style="width:60px; background:#f1f5f9;" readonly>
                     </div>
                 </div>
 
-                <!-- Group 3: 결제사항 등록 -->
-                <div class="group-box">
-                    <div class="group-box-title">결제사항 등록</div>
-                    <div class="field-row"><label style="width:40px;">현금</label><input type="number"
-                            style="text-align:right;"></div>
-                    <div class="field-row"><label style="width:40px;">할인</label><input type="number"
-                            style="text-align:right;"></div>
-                    <div class="field-row"><label style="width:40px;">통장</label><input type="number"
-                            style="text-align:right;"></div>
-                    <div class="field-row"><label style="width:40px;">카드</label><input type="number"
-                            style="text-align:right;"></div>
+                <!-- Group 3: 과세/결제 (우측) -->
+                <div class="group-box" style="width:340px;">
+                    <div style="display:flex; gap:6px; height:100%;">
+                        <div
+                            style="width:110px; border-right:1px solid #cbd5e1; padding-right:6px; font-size:11px; line-height:1.6;">
+                            <div class="group-box-title">과세 구분</div>
+                            <label><input type="radio" name="tax-opt"> 세금계산서</label><br>
+                            <label><input type="radio" name="tax-opt" checked> 계산서</label><br>
+                            <label><input type="checkbox"> 세금계산서발행</label>
+                            <div style="border-top:1px solid #cbd5e1; margin:4px 0; padding-top:4px;">
+                                <label><input type="radio" name="pay-type"> 영수</label>
+                                <label><input type="radio" name="pay-type" checked> 청구</label>
+                            </div>
+                        </div>
+                        <div style="flex:1; display:flex; flex-direction:column; gap:2px; padding-top:4px;">
+                            <div class="group-box-title" style="left:125px;">결제사항 등록</div>
+                            <div class="field-row" style="margin:0;"><label
+                                    style="width:35px; font-size:11px;">현금</label><input type="text" id="pay-cash"
+                                    style="flex:1; text-align:right; font-size:11px;"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();"></div>
+                            <div class="field-row" style="margin:0;"><label
+                                    style="width:35px; font-size:11px;">할인</label><input type="text" id="pay-discount"
+                                    style="flex:1; text-align:right; font-size:11px;"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();"></div>
+                            <div class="field-row" style="margin:0;"><label
+                                    style="width:35px; font-size:11px;">통장</label><input type="text" id="pay-bank"
+                                    style="flex:1; text-align:right; font-size:11px;"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();"></div>
+                            <div class="field-row" style="margin:0;"><label
+                                    style="width:35px; font-size:11px;">카드</label><input type="text" id="pay-card"
+                                    style="flex:1; text-align:right; font-size:11px;"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="window-body">
-                <!-- Main Grid -->
-                <div class="main-grid-area">
-                    <div class="data-grid-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 35px;">No</th>
-                                    <th style="width: 250px;">제품명</th>
-                                    <th style="width: 60px;">수량</th>
-                                    <th style="width: 100px;">단가</th>
-                                    <th style="width: 110px;">공급가액</th>
-                                    <th>비고</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sales-grid-body"></tbody>
-                        </table>
-                    </div>
-                    <!-- Memo / Footer Small Box -->
-                    <div style="height:60px; display:flex; gap:4px; padding-top:4px;">
-                        <div class="group-box flex-1">
-                            <div class="group-box-title">메모</div>
-                            <textarea
-                                style="width:100%; height:100%; border:none; background:transparent; font-size:11px; outline:none;"
-                                placeholder="내용을 입력하세요"></textarea>
+                <!-- Left Side: Info Bars + Main Grid (Vertical) -->
+                <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+                    <!-- Balance Info Bar (New - Legacy Style) -->
+                    <div style="background:#f1f5f9; border:1px solid #cbd5e1; margin:0 4px 4px 0; padding:4px 8px;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1.4fr; gap:6px; font-size:11px;">
+                            <div class="field-row" style="margin:0;"><label style="width:55px;">전일잔액</label><input
+                                    type="text" id="info-prev-balance"
+                                    style="flex:1; background:#fff; text-align:right; padding-right:4px;" readonly>
+                            </div>
+                            <div class="field-row" style="margin:0;"><label style="width:55px;">최종거래일</label><input
+                                    type="text" id="info-last-date" style="flex:1; background:#fff; text-align:center;"
+                                    readonly></div>
+                            <div class="field-row" style="margin:0;"><label style="width:55px;">입금금액</label><input
+                                    type="text" id="info-paying"
+                                    style="flex:1; background:#fff; text-align:right; padding-right:4px;" readonly>
+                            </div>
+                            <div class="field-row" style="margin:0;"><label style="width:55px;">금일합계</label><input
+                                    type="text" id="info-today-sum"
+                                    style="flex:1; background:#fff; text-align:right; padding-right:5px; font-weight:bold;"
+                                    readonly>
+                            </div>
                         </div>
-                        <div class="group-box" style="width:250px;">
-                            <div class="group-box-title">집계 내역</div>
-                            <div style="font-size:11px; line-height:1.2;">
-                                공급가액: <span id="sum-supply" style="float:right;">0</span><br>
-                                부가세액: <span id="sum-tax" style="float:right;">0</span>
+                        <div
+                            style="display:grid; grid-template-columns: 1fr 1fr 1fr 1.4fr; gap:6px; font-size:11px; margin-top:4px;">
+                            <div class="field-row" style="margin:0;"><label style="width:55px;">판매담당</label><input
+                                    type="text" id="info-manager" value="관리자"
+                                    style="flex:1; background:#fff; padding-left:4px;"></div>
+                            <div class="field-row" style="margin:0;"><label style="width:60px;">총반품금액</label><input
+                                    type="text" id="info-return-sum"
+                                    style="flex:1; background:#fff; text-align:right; padding-right:4px;" readonly>
+                            </div>
+                            <div class="field-row" style="margin:0;"><label style="width:55px;">할인금액</label><input
+                                    type="text" id="info-discount-sum"
+                                    style="flex:1; background:#fff; text-align:right; padding-right:4px;" readonly>
+                            </div>
+                            <div class="field-row" style="margin:0;"><label
+                                    style="width:55px; color:#c2410c; font-weight:bold;">총 잔 액</label><input type="text"
+                                    id="info-total-balance"
+                                    style="flex:1; background:#fff8e1; font-weight:bold; color:#c2410c; text-align:right; padding-right:5px;"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reset Bar -->
+                    <div
+                        style="display:flex; align-items:center; gap:10px; padding:2px 10px; background:#e2e8f0; border:1px solid #94a3b8; border-bottom:none; font-size:11px; margin-right:4px;">
+                        <div style="display:flex; align-items:center; gap:4px;">
+                            <input type="radio" name="amt-type" checked> 금액
+                            <input type="text" value="0"
+                                style="width:100px; text-align:right; font-weight:bold; background:#fff; border:1px solid #94a3b8;">
+                        </div>
+                    </div>
+
+                    <!-- Main Grid Area -->
+                    <div class="main-grid-area" style="margin-right:4px;">
+                        <div class="data-grid-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35px;">No</th>
+                                        <th style="width: 250px;">제품명</th>
+                                        <th style="width: 60px;">수량</th>
+                                        <th style="width: 100px;">단가</th>
+                                        <th style="width: 110px;">공급가액</th>
+                                        <th>비고</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sales-grid-body"></tbody>
+                            </table>
+                        </div>
+                        <!-- Memo / Footer Small Box -->
+                        <div style="height:60px; display:flex; gap:4px; padding-top:4px;">
+                            <div class="group-box flex-1">
+                                <div class="group-box-title">메모</div>
+                                <textarea
+                                    style="width:100%; height:100%; border:none; background:transparent; font-size:11px; outline:none;"
+                                    placeholder="내용을 입력하세요"></textarea>
+                            </div>
+                            <div class="group-box" style="width:250px;">
+                                <div class="group-box-title">집계 내역</div>
+                                <div style="font-size:11px; line-height:1.2;">
+                                    공급가액: <span id="sum-supply" style="float:right;">0</span><br>
+                                    부가세액: <span id="sum-tax" style="float:right;">0</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Sidebar (History) -->
+                <!-- Right Sidebar (History/Stock) -->
                 <div class="side-info-area">
                     <div class="side-table-container">
                         <div style="background:#475569; color:#fff; font-size:10px; padding:2px 6px;">거래 상세 내역</div>
@@ -1000,12 +1103,14 @@
                     style="margin: 0 auto; width: 100%; max-width: 1100px; padding: 25px; border-radius: 0; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); grid-template-columns: repeat(2, 1fr); background: #fff;">
                     <div class="input-row"><label>제품코드</label><input type="text" readonly
                             style="background: #f9f9f9; font-weight: bold;"></div>
-                    <div class="input-row"><label>매입단가</label><input type="number"
-                            style="font-weight: bold; color: #d32f2f;"></div>
+                    <div class="input-row"><label>매입단가</label><input type="text"
+                            style="font-weight: bold; color: #d32f2f; text-align:right;"
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
 
                     <div class="input-row"><label>제품명</label><input type="text" style="font-weight: bold;"></div>
-                    <div class="input-row"><label>매출단가</label><input type="number"
-                            style="font-weight: bold; color: #1976d2;"></div>
+                    <div class="input-row"><label>매출단가</label><input type="text"
+                            style="font-weight: bold; color: #1976d2; text-align:right;"
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
 
                     <div class="input-row"><label>대분류</label><select>
                             <option>대분류 1</option>
@@ -1016,9 +1121,11 @@
                             <option>소분류 2</option>
                         </select></div>
 
-                    <div class="input-row"><label>현재고</label><input type="number" readonly style="background: #eee;">
+                    <div class="input-row"><label>현재고</label><input type="text" readonly
+                            style="background: #eee; text-align:right;">
                     </div>
-                    <div class="input-row"><label>A 단가</label><input type="number"></div>
+                    <div class="input-row"><label>A 단가</label><input type="text" style="text-align:right;"
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
 
                     <div class="input-row" style="grid-column: span 2;"><label>비고</label><input type="text"
                             style="width: 100%;"></div>
@@ -1054,6 +1161,39 @@
 
     <script>
         lucide.createIcons();
+
+        // --- Date Management ---
+        function updateSystemDate() {
+            const dateInput = document.getElementById('trade-date-input');
+            const displayDiv = document.getElementById('system-date-display');
+            if (!dateInput || !displayDiv) return;
+
+            const dateValue = dateInput.value;
+            if (!dateValue) return;
+
+            const date = new Date(dateValue + 'T00:00:00');
+            const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+            const dayName = days[date.getDay()];
+            displayDiv.textContent = `${dateValue} (${dayName}) | 온라인 지원 연동 중`;
+        }
+
+        function setTodayDate() {
+            const dateInput = document.getElementById('trade-date-input');
+            if (!dateInput) return;
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}`;
+
+            updateSystemDate();
+        }
+
+        // 페이지 로드 시 초기화
+        window.addEventListener('DOMContentLoaded', function () {
+            setTodayDate();
+        });
 
         // --- Firebase Configuration ---
         const firebaseConfig = {
@@ -1444,12 +1584,30 @@
         async function saveTransaction() {
             const type = document.getElementById('trade-type-select').value;
             const customerInput = document.getElementById('sales-customer-input');
-            const customer = customerInput ? customerInput.value : '';
+            const customer = customerInput ? customerInput.value.trim() : '';
             const memoText = document.querySelector('#sales-reg textarea')?.value || '';
-            const date = new Date().toISOString().split('T')[0];
+            const date = document.querySelector('#sales-reg input[type="date"]')?.value || new Date().toISOString().split('T')[0];
+            const seq = document.getElementById('reg-seq')?.value || '1';
+
+            if (!customer) {
+                alert('거래처를 선택해주세요.');
+                return;
+            }
+
+            // 결제 정보
+            const payCash = parseInt(document.getElementById('pay-cash')?.value) || 0;
+            const payDiscount = parseInt(document.getElementById('pay-discount')?.value) || 0;
+            const payBank = parseInt(document.getElementById('pay-bank')?.value) || 0;
+            const payCard = parseInt(document.getElementById('pay-card')?.value) || 0;
 
             const rows = document.querySelectorAll('#sales-grid-body tr');
             const promises = [];
+
+            // 기존 동일 전표 삭제 (수정 모드 대응)
+            const existingRows = DB.transactions.filter(t => t.date === date && t.customer === customer && t.seq === seq);
+            for (const rowObj of existingRows) {
+                promises.push(db.collection('transactions').doc(rowObj.uid).delete());
+            }
 
             rows.forEach((row) => {
                 const pname = row.querySelector('.input-pname')?.value;
@@ -1462,27 +1620,124 @@
                         date, type, customer, pname, qty, price,
                         supply: qty * price,
                         tax: Math.floor(qty * price * 0.1),
-                        memo: memoText, // 전체 메모
-                        rowMemo: rowMemo, // 행별 비고
+                        memo: memoText,
+                        rowMemo: rowMemo,
+                        seq: seq,
+                        payments: {
+                            cash: payCash,
+                            discount: payDiscount,
+                            bank: payBank,
+                            card: payCard
+                        },
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     };
                     promises.push(saveData('transaction', transData));
                 }
             });
 
-            if (promises.length === 0) {
+            if (promises.length === 0 && existingRows.length === 0) {
                 alert('저장할 항목이 없습니다.');
                 return;
             }
 
             try {
                 await Promise.all(promises);
-                alert('전표가 저장되었습니다.');
-                renderSalesGrid(); // 저장 후에는 클리어
+                alert('전표가 저장/수정되었습니다.');
+                renderSalesGrid();
                 if (customer) updateCustomerHistory(customer);
             } catch (err) {
                 console.error(err);
                 alert('저장 중 오류가 발생했습니다.');
+            }
+        }
+
+        function changeSeq(delta) {
+            const seqInput = document.getElementById('reg-seq');
+            let val = parseInt(seqInput.value) || 1;
+
+            const todayStr = document.querySelector('#sales-reg input[type="date"]')?.value || new Date().toISOString().split('T')[0];
+
+            // 오늘 날짜 전체 전표 중 최대 순번 찾기 (거래처 상관없이)
+            const todayMatches = DB.transactions.filter(t => t.date === todayStr && t.seq);
+            const maxSeq = todayMatches.reduce((max, t) => Math.max(max, parseInt(t.seq) || 0), 0);
+
+            val += delta;
+            if (val < 1) val = 1;
+            // 오늘 입력한 마지막 번호 다음까지만 대기
+            if (val > maxSeq + 1) val = maxSeq + 1;
+
+            seqInput.value = val;
+            loadTransactionBySeq();
+        }
+
+        function clearSalesGridOnly() {
+            const rows = document.querySelectorAll('#sales-grid-body tr');
+            rows.forEach(r => {
+                r.querySelector('.input-pname').value = '';
+                r.querySelector('.input-qty').value = '';
+                r.querySelector('.input-price').value = '';
+                r.querySelector('.cell-supply').innerText = '';
+                r.querySelector('.input-row-memo').value = '';
+            });
+            updateTotals();
+        }
+
+        function loadTransactionBySeq() {
+            const date = document.querySelector('#sales-reg input[type="date"]')?.value;
+            const seq = document.getElementById('reg-seq').value;
+
+            if (!date) return;
+
+            // 거래처 상관없이 해당 날짜 + 순번으로 검색
+            const matches = DB.transactions.filter(t => t.date === date && t.seq === seq);
+
+            const customerInput = document.getElementById('sales-customer-input');
+            const memoArea = document.querySelector('#sales-reg textarea');
+            const rows = document.querySelectorAll('#sales-grid-body tr');
+
+            // 그리드 및 결제칸 초기화
+            rows.forEach(r => {
+                r.querySelector('.input-pname').value = '';
+                r.querySelector('.input-qty').value = '';
+                r.querySelector('.input-price').value = '';
+                r.querySelector('.cell-supply').innerText = '';
+                r.querySelector('.input-row-memo').value = '';
+            });
+            document.getElementById('pay-cash').value = '0';
+            document.getElementById('pay-discount').value = '0';
+            document.getElementById('pay-bank').value = '0';
+            document.getElementById('pay-card').value = '0';
+            if (memoArea) memoArea.value = '';
+
+            if (matches.length > 0) {
+                // 전표 데이터 있으면 거래처부터 제품목록까지 싹 로드
+                if (customerInput) {
+                    customerInput.value = matches[0].customer || '';
+                    updateCustomerHistory(customerInput.value); // 거래처 바뀌었으니 히스토리도 갱신
+                }
+
+                matches.forEach((data, i) => {
+                    if (rows[i]) {
+                        rows[i].querySelector('.input-pname').value = data.pname;
+                        rows[i].querySelector('.input-qty').value = data.qty;
+                        rows[i].querySelector('.input-price').value = data.price;
+                        rows[i].querySelector('.cell-supply').innerText = (data.supply || 0).toLocaleString();
+                        rows[i].querySelector('.input-row-memo').value = data.rowMemo || '';
+                    }
+                });
+
+                const p = matches[0].payments || {};
+                document.getElementById('pay-cash').value = p.cash || 0;
+                document.getElementById('pay-discount').value = p.discount || 0;
+                document.getElementById('pay-bank').value = p.bank || 0;
+                document.getElementById('pay-card').value = p.card || 0;
+                if (memoArea) memoArea.value = matches[0].memo || '';
+
+                updateTotals();
+            } else {
+                // 데이터 없는 번호면 거래처 칸도 비워줌 (새 전표 모드)
+                if (customerInput) customerInput.value = '';
+                updateTotals();
             }
         }
 
@@ -1549,11 +1804,36 @@
                 `;
             }
             tbody.innerHTML = html;
+
             // 상단 초기화
-            const custInput = document.getElementById('sales-customer-input');
-            if (custInput) custInput.value = '';
+            const fieldsToClear = [
+                'sales-customer-input', 'pay-cash', 'pay-discount', 'pay-bank', 'pay-card',
+                'info-prev-balance', 'info-last-date', 'info-paying', 'info-today-sum', 'info-total-balance'
+            ];
+            fieldsToClear.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = (id.startsWith('info-') || id.startsWith('pay-')) ? '0' : '';
+            });
+
             const memoArea = document.querySelector('#sales-reg textarea');
             if (memoArea) memoArea.value = '';
+
+            // 작성순번 자동 채번 (화면의 거래일자 기준으로 마지막 순번 + 1)
+            const dateInput = document.querySelector('#sales-reg input[type="date"]');
+            const todayStr = dateInput ? dateInput.value : new Date().toISOString().split('T')[0];
+            const maxSeq = DB.transactions
+                .filter(t => t.date === todayStr && t.seq)
+                .reduce((max, t) => Math.max(max, parseInt(t.seq) || 0), 0);
+
+            const seqInput = document.getElementById('reg-seq');
+            if (seqInput) seqInput.value = maxSeq + 1;
+
+            // 작성시간 업데이트
+            const timeInput = document.getElementById('reg-time');
+            if (timeInput) {
+                const now = new Date();
+                timeInput.value = now.toTimeString().split(' ')[0];
+            }
 
             updateTotals();
         }
@@ -1561,7 +1841,23 @@
         function updateCustomerHistory(customerName) {
             const historyBody = document.getElementById('side-history-body');
             if (!historyBody) return;
+
+            // 히스토리 필터링
             const matches = DB.transactions.filter(t => t.customer === customerName).slice(-10);
+
+            // 잔액 정보 자동 로드 (전일잔액 계산)
+            // 실제 상용 앱에서는 과거 모든 트랜잭션의 합 - 모든 결제 합으로 구함
+            const allCustTrans = DB.transactions.filter(t => t.customer === customerName);
+            const totalSales = allCustTrans.filter(t => t.type === 'sales').reduce((sum, t) => sum + (t.supply || 0) + (t.tax || 0), 0);
+            const totalPayments = allCustTrans.reduce((sum, t) => {
+                const p = t.payments || {};
+                return sum + (p.cash || 0) + (p.bank || 0) + (p.card || 0);
+            }, 0);
+
+            const currentBalance = totalSales - totalPayments;
+            const prevBalanceEl = document.getElementById('info-prev-balance');
+            if (prevBalanceEl) prevBalanceEl.value = currentBalance.toLocaleString();
+
             if (matches.length === 0) {
                 historyBody.innerHTML = '<tr><td colspan="3" align="center" style="padding:10px; color:#999;">기존 내역 없음</td></tr>';
                 return;
@@ -1573,6 +1869,8 @@
                     <td align="right">${t.qty}</td>
                 </tr>
             `).join('');
+
+            updateTotals(); // 잔액 반영 후 다시 계산
         }
 
         // --- Event Listeners ---
@@ -1711,10 +2009,28 @@
                 totalSupply += parseFloat(td.innerText.replace(/,/g, '')) || 0;
             });
             const tax = Math.floor(totalSupply * 0.1);
+            const todaySum = totalSupply + tax;
+
             if (document.getElementById('sum-supply')) document.getElementById('sum-supply').innerText = totalSupply.toLocaleString();
             if (document.getElementById('sum-tax')) document.getElementById('sum-tax').innerText = tax.toLocaleString();
-            const total = totalSupply + tax;
-            if (document.getElementById('sum-total-footer')) document.getElementById('sum-total-footer').innerText = total.toLocaleString();
+            if (document.getElementById('sum-total-footer')) document.getElementById('sum-total-footer').innerText = todaySum.toLocaleString();
+
+            // 상단 정보 바 업데이트
+            const prevBalance = parseInt(document.getElementById('info-prev-balance')?.value.replace(/,/g, '')) || 0;
+            const payCash = parseInt(document.getElementById('pay-cash')?.value) || 0;
+            const payBank = parseInt(document.getElementById('pay-bank')?.value) || 0;
+            const payCard = parseInt(document.getElementById('pay-card')?.value) || 0;
+            const payDiscount = parseInt(document.getElementById('pay-discount')?.value) || 0;
+
+            const totalPaying = payCash + payBank + payCard;
+
+            if (document.getElementById('info-paying')) document.getElementById('info-paying').value = totalPaying.toLocaleString();
+            if (document.getElementById('info-today-sum')) document.getElementById('info-today-sum').value = todaySum.toLocaleString();
+            if (document.getElementById('info-discount-sum')) document.getElementById('info-discount-sum').value = payDiscount.toLocaleString();
+
+            // 총 잔액 = 전일잔액 + 금일합계 - 입금금액 - 할인금액(필요시)
+            const totalBalance = prevBalance + todaySum - totalPaying - payDiscount;
+            if (document.getElementById('info-total-balance')) document.getElementById('info-total-balance').value = totalBalance.toLocaleString();
         }
 
         renderSalesGrid();
