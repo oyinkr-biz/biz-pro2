@@ -1,0 +1,374 @@
+:root {
+    --erp-bg: #f8fafc;
+    /* Modern light background */
+    --erp-header-bg: #ffffff;
+    --erp-toolbar-bg: #f1f5f9;
+    --win-blue: #0f172a;
+    /* Deep Slate */
+    --accent-primary: #3b82f6;
+    /* Sapphire Blue */
+    --accent-success: #10b981;
+    /* Emerald Green */
+    --accent-error: #ef4444;
+    /* Vivid Red */
+    --accent-warning: #f59e0b;
+    /* Amber Gold */
+    --btn-border: #e2e8f0;
+    --input-border: #cbd5e1;
+    --table-header: #f1f5f9;
+    --win-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Malgun Gothic', 'Dotum', sans-serif;
+}
+
+body {
+    background: var(--win-blue);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* System Bar & Menu Bar */
+.system-bar {
+    background: #fff;
+    padding: 5px 12px;
+    font-size: 11px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-bar {
+    background: #fff;
+    display: flex;
+    border-bottom: 1px solid #aaa;
+}
+
+.menu-item {
+    padding: 7px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    position: relative;
+}
+
+.menu-item:hover {
+    background: #e5f1fb;
+}
+
+/* Dropdown Menu Style (based on screenshot 113643) */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid #aaa;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1000;
+    min-width: 180px;
+}
+
+.menu-item:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 8px 15px;
+    font-size: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-item:hover {
+    background: #0078d7;
+    color: #fff;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+/* Workspace */
+.workspace {
+    flex: 1;
+    position: relative;
+    padding: 5px;
+}
+
+/* ERP Window Shell */
+.erp-window {
+    background: var(--erp-bg);
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--win-shadow);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    min-width: 1050px;
+    width: 1100px;
+    height: 850px;
+    top: 20px;
+    left: 10px;
+    resize: both;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+}
+
+.erp-window.maximized {
+    width: 100% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    resize: none;
+    border-radius: 0;
+}
+
+.window-title-bar {
+    background: linear-gradient(90deg, #1e293b, #334155);
+    color: #f8fafc;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #1e293b;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: move;
+    user-select: none;
+}
+
+.window-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 2px;
+}
+
+.win-btn {
+    width: 28px;
+    height: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+    margin-left: 2px;
+}
+
+.win-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #fff;
+}
+
+.win-btn.close-btn {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.win-btn.close-btn:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+/* Toolbar Buttons */
+.erp-toolbar {
+    background: var(--erp-header-bg);
+    padding: 6px;
+    display: flex;
+    gap: 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+.tool-btn {
+    background: #ffffff;
+    border: 1px solid var(--btn-border);
+    padding: 8px 15px;
+    font-size: 12px;
+    color: #475569;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    min-width: 75px;
+    height: 65px;
+    transition: all 0.2s;
+    border-radius: 6px;
+}
+
+.tool-btn:hover {
+    background: #f8fafc;
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.tool-btn i {
+    width: 22px;
+    height: 22px;
+}
+
+/* Form Styles */
+.form-container {
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+    background: #fff;
+    margin: 10px;
+    border: 1px solid #ddd;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-row label {
+    font-size: 12px;
+    min-width: 100px;
+    text-align: right;
+    color: #444;
+}
+
+.input-row input,
+.input-row select {
+    flex: 1;
+    padding: 3px 6px;
+    border: 1px solid var(--input-border);
+    font-size: 13px;
+}
+
+.input-row input:focus {
+    background: #fff8e1;
+    border-color: var(--accent-blue);
+    outline: none;
+}
+
+/* Grid Table */
+.data-grid-container {
+    flex: 1;
+    overflow-y: scroll;
+    /* 항상 스크롤바 영역 확보 (요청 1번) */
+    overflow-x: auto;
+    margin: 0 10px 10px 10px;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    min-height: 400px;
+    /* 테이블 영역 높이 대폭 확장 (요청 2번) */
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* 고정 레이아웃으로 데이터 정렬 유지 */
+}
+
+.data-table th {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 6px 4px;
+    font-size: 11px;
+    color: #475569;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.data-table td {
+    border: 1px solid #e2e8f0;
+    padding: 3px 6px;
+    font-size: 12px;
+    height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.data-table tr:hover {
+    background: #f8fafc;
+}
+
+.data-table tr:nth-child(even) {
+    background: #fafafa;
+}
+
+.data-table input {
+    border: none;
+    width: 100%;
+    padding: 4px;
+    background: transparent;
+}
+
+.data-table input:focus {
+    background: #e7f3ff;
+    outline: none;
+}
+
+/* Summary Bar */
+.summary-bar {
+    background: #eef2f7;
+    border-top: 1px solid #888;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 30px;
+    font-size: 14px;
+}
+
+.summary-value {
+    font-weight: bold;
+    color: var(--win-blue);
+}
+
+/* Taskbar for Minimized Windows */
+.taskbar {
+    height: 42px;
+    background: #1e293b;
+    border-top: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    padding: 2px 10px;
+    gap: 4px;
+    z-index: 10000;
+    flex-shrink: 0;
+}
+
+.task-item {
+    background: #334155;
+    border: 1px solid #475569;
+    color: #f8fafc;
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    min-width: 170px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.task-item:hover {
+    background: #475569;
+    border-color: var(--accent-primary);
+}
+
+.task-item i {
+    width: 14px;
+    height: 14px;
+}
