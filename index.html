@@ -7,24 +7,18 @@
     <title>(비즈테크) For BizTech Edition - Classic ERP</title>
     <style>
         :root {
-            --erp-bg: #f8fafc;
-            /* Modern light background */
+            --erp-bg: #f1f5f9;
             --erp-header-bg: #ffffff;
-            --erp-toolbar-bg: #f1f5f9;
-            --win-blue: #0f172a;
-            /* Deep Slate */
-            --accent-primary: #3b82f6;
-            /* Sapphire Blue */
+            --erp-toolbar-bg: #f8fafc;
+            --win-blue: #1e293b;
+            --accent-primary: #2563eb;
             --accent-success: #10b981;
-            /* Emerald Green */
             --accent-error: #ef4444;
-            /* Vivid Red */
             --accent-warning: #f59e0b;
-            /* Amber Gold */
-            --btn-border: #e2e8f0;
-            --input-border: #cbd5e1;
-            --table-header: #f1f5f9;
-            --win-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --btn-border: #cbd5e1;
+            --input-border: #94a3b8;
+            --table-header: #e2e8f0;
+            --win-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -35,17 +29,31 @@
         }
 
         body {
-            background: var(--win-blue);
+            background: #334155;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* System Bar & Menu Bar */
+        /* Layout Helpers */
+        .flex-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .flex-1 {
+            flex: 1;
+        }
+
+        .p-2 {
+            padding: 8px;
+        }
+
+        /* System & Menu Bar */
         .system-bar {
             background: #fff;
-            padding: 5px 12px;
+            padding: 4px 12px;
             font-size: 11px;
             border-bottom: 1px solid #ccc;
             display: flex;
@@ -59,17 +67,16 @@
         }
 
         .menu-item {
-            padding: 7px 12px;
+            padding: 6px 12px;
             font-size: 12px;
             cursor: pointer;
             position: relative;
         }
 
         .menu-item:hover {
-            background: #e5f1fb;
+            background: #e2e8f0;
         }
 
-        /* Dropdown Menu Style (based on screenshot 113643) */
         .dropdown-menu {
             position: absolute;
             top: 100%;
@@ -87,66 +94,57 @@
         }
 
         .dropdown-item {
-            padding: 8px 15px;
+            padding: 6px 15px;
             font-size: 12px;
             border-bottom: 1px solid #eee;
         }
 
         .dropdown-item:hover {
-            background: #0078d7;
+            background: #2563eb;
             color: #fff;
         }
 
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        /* Workspace */
         .workspace {
             flex: 1;
             position: relative;
             padding: 5px;
+            background: #475569;
         }
 
         /* ERP Window Shell */
         .erp-window {
-            background: var(--erp-bg);
-            border: 1px solid #e2e8f0;
+            background: #e2e8f0;
+            border: 1px solid #64748b;
             box-shadow: var(--win-shadow);
             display: flex;
             flex-direction: column;
             position: absolute;
-            min-width: 1050px;
-            width: 1100px;
-            height: 850px;
-            top: 20px;
+            min-width: 1000px;
+            width: 1200px;
+            height: 900px;
+            top: 10px;
             left: 10px;
             resize: both;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 8px;
+            border-radius: 4px;
         }
 
         .erp-window.maximized {
             width: 100% !important;
-            height: 100% !important;
+            height: calc(100% - 42px) !important;
             top: 0 !important;
             left: 0 !important;
-            resize: none;
             border-radius: 0;
         }
 
         .window-title-bar {
-            background: linear-gradient(90deg, #1e293b, #334155);
-            color: #f8fafc;
-            padding: 8px 12px;
+            background: #334155;
+            color: #fff;
+            padding: 6px 10px;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid #1e293b;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 12px;
             cursor: move;
-            user-select: none;
         }
 
         .window-controls {
@@ -156,229 +154,299 @@
         }
 
         .win-btn {
-            width: 28px;
-            height: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
+            width: 26px;
+            height: 18px;
+            border: 1px solid #64748b;
+            background: #475569;
             color: #fff;
-            font-size: 12px;
+            font-size: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 2px;
-            margin-left: 2px;
         }
 
         .win-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: #fff;
-        }
-
-        .win-btn.close-btn {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: rgba(239, 68, 68, 0.4);
+            background: #64748b;
         }
 
         .win-btn.close-btn:hover {
             background: #ef4444;
-            border-color: #ef4444;
         }
 
-        /* Toolbar Buttons */
+        /* Toolbar */
         .erp-toolbar {
-            background: var(--erp-header-bg);
-            padding: 6px;
+            background: #cbd5e1;
+            padding: 4px;
             display: flex;
-            gap: 5px;
-            border-bottom: 1px solid #ccc;
+            gap: 4px;
+            border-bottom: 1px solid #94a3b8;
         }
 
         .tool-btn {
-            background: #ffffff;
-            border: 1px solid var(--btn-border);
-            padding: 8px 15px;
-            font-size: 12px;
-            color: #475569;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
+            background: #f8fafc;
+            border: 1px solid #94a3b8;
+            padding: 4px 8px;
+            font-size: 11px;
             cursor: pointer;
-            min-width: 75px;
-            height: 65px;
-            transition: all 0.2s;
-            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 2px;
         }
 
         .tool-btn:hover {
-            background: #f8fafc;
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background: #e2e8f0;
         }
 
-        .tool-btn i {
-            width: 22px;
-            height: 22px;
+        /* Layout: Top Form Blocks */
+        .top-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 200px 180px;
+            gap: 8px;
+            padding: 8px;
+            background: #cbd5e1;
         }
 
-        /* Form Styles */
+        .group-box {
+            border: 1px solid #94a3b8;
+            padding: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .group-box-title {
+            position: absolute;
+            top: -8px;
+            left: 10px;
+            background: #e2e8f0;
+            padding: 0 4px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        /* Form Controls (Restore legacy styles for registration windows) */
         .form-container {
             padding: 15px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 10px;
             background: #fff;
-            margin: 10px;
-            border: 1px solid #ddd;
+            margin: 5px;
+            border: 1px solid #cbd5e1;
         }
 
         .input-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            margin-bottom: 5px;
         }
 
         .input-row label {
-            font-size: 12px;
-            min-width: 100px;
+            font-size: 11px;
+            min-width: 80px;
             text-align: right;
-            color: #444;
+            color: #1e293b;
+            font-weight: bold;
         }
 
         .input-row input,
-        .input-row select {
+        .input-row select,
+        .input-row textarea {
             flex: 1;
             padding: 3px 6px;
-            border: 1px solid var(--input-border);
-            font-size: 13px;
+            border: 1px solid #94a3b8;
+            font-size: 12px;
         }
 
         .input-row input:focus {
             background: #fff8e1;
-            border-color: var(--accent-blue);
+            border-color: #2563eb;
             outline: none;
         }
 
-        /* Grid Table */
+        /* Form Controls (New styled rows for sales-reg) */
+        .field-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .field-row label {
+            font-size: 11px;
+            width: 65px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .field-row input {
+            padding: 2px 4px;
+            border: 1px solid #94a3b8;
+            font-size: 12px;
+            ime-mode: active;
+            /* 한글 우선 모드 (Internet Explorer/Legacy) */
+            -webkit-ime-mode: active;
+            /* Edge/Chrome hint */
+        }
+
+        /* Modern IME hint - Suggesting Korean */
+        input:not([type="number"]) {
+            ime-mode: active;
+            -webkit-ime-mode: active;
+        }
+
+        .input-pname {
+            ime-mode: active !important;
+            -webkit-ime-mode: active !important;
+        }
+
+        .input-pname:read-only {
+            background-color: #f8fafc;
+            color: #64748b;
+            cursor: default;
+        }
+
+        /* Main Content Split */
+        .window-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .main-grid-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .side-info-area {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-left: 1px solid #94a3b8;
+            padding-left: 4px;
+        }
+
         .data-grid-container {
             flex: 1;
-            overflow-y: scroll;
-            /* 항상 스크롤바 영역 확보 */
-            overflow-x: auto;
-            margin: 0 10px 10px 10px;
+            overflow: auto;
             background: #fff;
-            border: 1px solid #cbd5e1;
-            min-height: 400px;
-            /* 테이블 영역 높이 대폭 확장 */
+            border: 1px solid #94a3b8;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            /* 고정 레이아웃으로 데이터 정렬 유지 */
         }
 
         .data-table th {
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            padding: 6px 4px;
+            background: #e2e8f0;
+            border: 1px solid #94a3b8;
+            padding: 4px;
             font-size: 11px;
-            color: #475569;
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
         .data-table td {
-            border: 1px solid #e2e8f0;
-            padding: 3px 6px;
+            border: 1px solid #cbd5e1;
+            padding: 2px 4px;
             font-size: 12px;
             height: 24px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .data-table tr:hover {
-            background: #f8fafc;
-        }
-
-        .data-table tr:nth-child(even) {
-            background: #fafafa;
         }
 
         .data-table input {
-            border: none;
             width: 100%;
-            padding: 4px;
+            border: none;
             background: transparent;
+            padding: 2px;
         }
 
         .data-table input:focus {
-            background: #e7f3ff;
+            background: #fff8e1;
             outline: none;
         }
 
-        /* Summary Bar */
-        .summary-bar {
-            background: #eef2f7;
-            border-top: 1px solid #888;
-            padding: 10px 20px;
+        .side-table-container {
+            border: 1px solid #94a3b8;
+            background: #fff;
+            flex: 1;
+            overflow: auto;
+        }
+
+        .side-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        .side-table th {
+            background: #f1f5f9;
+            padding: 4px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .side-table td {
+            border: 1px solid #f1f5f9;
+            padding: 2px 4px;
+        }
+
+        /* Footer / Summary */
+        .window-footer {
+            background: #cbd5e1;
+            border-top: 1px solid #94a3b8;
+            padding: 6px;
             display: flex;
-            justify-content: flex-end;
-            gap: 30px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bottom-summary {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+        }
+
+        .summary-label {
+            font-weight: bold;
+        }
+
+        .summary-amount {
+            color: #b91c1c;
+            font-weight: bold;
             font-size: 14px;
         }
 
-        .summary-value {
-            font-weight: bold;
-            color: var(--win-blue);
-        }
-
-        /* Taskbar for Minimized Windows */
+        /* Taskbar */
         .taskbar {
-            height: 42px;
+            height: 40px;
             background: #1e293b;
             border-top: 1px solid #334155;
             display: flex;
             align-items: center;
-            padding: 2px 10px;
+            padding: 0 10px;
             gap: 4px;
-            z-index: 10000;
-            flex-shrink: 0;
         }
 
         .task-item {
             background: #334155;
-            border: 1px solid #475569;
-            color: #f8fafc;
-            padding: 6px 18px;
-            font-size: 12px;
-            font-weight: 500;
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 11px;
             cursor: pointer;
-            min-width: 170px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .task-item:hover {
-            background: #475569;
-            border-color: var(--accent-primary);
-        }
-
-        .task-item i {
-            width: 14px;
-            height: 14px;
+            border: 1px solid #475569;
+            min-width: 140px;
+            border-radius: 2px;
         }
     </style>
     <!-- Lucide Icons -->
@@ -392,7 +460,7 @@
     <!-- System Info Bar -->
     <header class="system-bar">
         <div>
-            <strong>(비즈테크) For BizTech Edition Ver 0.0.3 (Cloud Sync)</strong> - 사용자: 관리자
+            <strong>(비즈테크) For BizTech Edition Ver 0.1.6 (IME Ultimate)</strong> - 사용자: 관리자
         </div>
         <div>2026-02-04 (수요일) | 온라인 지원 연동 중</div>
     </header>
@@ -598,14 +666,14 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>거래일자</th>
-                            <th>거래처명</th>
-                            <th>전일잔액</th>
-                            <th>매출수량</th>
-                            <th>단가</th>
-                            <th>총금액</th>
-                            <th>입금금액</th>
-                            <th>잔액</th>
+                            <th style="width: 100px;">일자</th>
+                            <th style="width: 150px;">거래처</th>
+                            <th>품명</th>
+                            <th style="width: 80px;">구분</th>
+                            <th style="width: 60px;">수량</th>
+                            <th style="width: 100px;">단가</th>
+                            <th style="width: 120px;">공급가액</th>
+                            <th style="width: 100px;">비고</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -687,79 +755,158 @@
         </div>
         <!-- 2. 매입/매출 통합 등록 윈도우 -->
         <div id="sales-reg" class="erp-window" style="display: none;">
-            <div class="window-title-bar" id="reg-title-bar">
+            <div class="window-title-bar">
                 <i data-lucide="shopping-cart" style="width: 14px; margin-right: 8px;"></i> <span id="reg-title">매출
                     등록</span>
                 <div class="window-controls">
                     <div class="win-btn" onclick="minimizeWindow('sales-reg')">_</div>
                     <div class="win-btn" onclick="maximizeWindow('sales-reg')">□</div>
-                    <div class="win-btn close-btn" onclick="hideWindow('sales-reg')"
-                        style="background: var(--accent-error); color: white;">×</div>
+                    <div class="win-btn close-btn" onclick="hideWindow('sales-reg')">×</div>
                 </div>
             </div>
 
             <div class="erp-toolbar">
-                <div
-                    style="display: flex; align-items: center; background: #fff; border: 1px solid #aaa; padding: 2px 10px; margin-right: 15px;">
-                    <label style="font-size: 12px; font-weight: bold; margin-right: 10px;">처리구분:</label>
-                    <select id="trade-type-select" onchange="switchTradeType(this.value)"
-                        style="border: none; outline: none; font-weight: bold; color: #004d99; cursor: pointer;">
-                        <option value="sales">매출 등록 (판매)</option>
-                        <option value="purchase">매입 등록 (구매)</option>
-                    </select>
+                <button class="tool-btn"><i data-lucide="bar-chart-2"></i> 통계(F2)</button>
+                <button class="tool-btn"><i data-lucide="file-text"></i> 거래명세서(F9)</button>
+                <button class="tool-btn"><i data-lucide="receipt"></i> 거래영수증(F7)</button>
+                <button class="tool-btn" onclick="saveTransaction()" style="background:#dcfce7; font-weight:bold;"><i
+                        data-lucide="save"></i> 저장(F8)</button>
+                <button class="tool-btn" onclick="hideWindow('sales-reg')"><i data-lucide="x-circle"></i>
+                    종료(F10)</button>
+            </div>
+
+            <!-- Top Grid Layout -->
+            <div class="top-form-grid">
+                <!-- Group 1: 거래처 정보 -->
+                <div class="group-box">
+                    <div class="group-box-title">거래처 정보</div>
+                    <div class="field-row">
+                        <label>처리구분</label>
+                        <select id="trade-type-select" onchange="switchTradeType(this.value)" style="flex:1;">
+                            <option value="sales">매출 등록</option>
+                            <option value="purchase">매입 등록</option>
+                        </select>
+                        <select style="width:60px;">
+                            <option>일반</option>
+                        </select>
+                    </div>
+                    <div class="field-row">
+                        <label id="target-label">거 래 처</label>
+                        <input type="text" id="sales-customer-input" list="customer-list-dl" placeholder="거래처를 선택하세요"
+                            style="flex:none; width:300px;">
+                        <button style="font-size:10px; padding:2px 4px;">변경</button>
+                    </div>
+                    <div class="field-row">
+                        <label>담당자</label><input type="text" value="관리자">
+                        <label style="width:40px;">HP</label><input type="text">
+                    </div>
                 </div>
-                <div id="toolbar-btns" style="display: flex; gap: 5px;">
-                    <button class="tool-btn"><i data-lucide="bar-chart-2"></i> 통계(F2)</button>
-                    <button class="tool-btn"><i data-lucide="file-text"></i> 거래명세서(F9)</button>
-                    <button class="tool-btn"><i data-lucide="receipt"></i> 거래영수증(F7)</button>
-                    <button class="tool-btn" onclick="saveTransaction()"
-                        style="background: #e3f2fd; margin-left: 20px;"><i data-lucide="save"></i>
-                        저장(F8)</button>
-                    <button class="tool-btn" onclick="hideWindow('sales-reg')"><i data-lucide="x-circle"></i>
-                        종료(F10)</button>
+
+                <!-- Group 2: 과세 구분 -->
+                <div class="group-box">
+                    <div class="group-box-title">과세 구분</div>
+                    <div style="font-size:11px;">
+                        <label><input type="radio" name="tax-opt"> 세금계산서</label><br>
+                        <label><input type="radio" name="tax-opt" checked> 계산서</label><br>
+                        <label><input type="checkbox"> 세금계산서발행</label><br>
+                        <hr style="margin:4px 0;">
+                        <label><input type="radio" name="pay-type"> 영수</label>
+                        <label><input type="radio" name="pay-type" checked> 청구</label>
+                    </div>
+                </div>
+
+                <!-- Group 3: 결제사항 등록 -->
+                <div class="group-box">
+                    <div class="group-box-title">결제사항 등록</div>
+                    <div class="field-row"><label style="width:40px;">현금</label><input type="number"
+                            style="text-align:right;"></div>
+                    <div class="field-row"><label style="width:40px;">할인</label><input type="number"
+                            style="text-align:right;"></div>
+                    <div class="field-row"><label style="width:40px;">통장</label><input type="number"
+                            style="text-align:right;"></div>
+                    <div class="field-row"><label style="width:40px;">카드</label><input type="number"
+                            style="text-align:right;"></div>
                 </div>
             </div>
 
-            <section class="form-container">
-                <div class="input-row"><label id="target-label">매출거래처</label><input type="text" value="(주) 비즈테크"></div>
-                <div class="input-row"><label>거래일자</label><input type="date" value="2026-02-04"></div>
-                <div class="input-row"><label>담당자</label><input type="text" value="홍길동"></div>
-                <div class="input-row"><label>결제방식</label><select>
-                        <option>카드 (외상)</option>
-                        <option>현금</option>
-                        <option>계좌이체</option>
-                    </select></div>
-                <div class="input-row"><label>창고구분</label><select>
-                        <option>본사창고</option>
-                        <option>매장전시</option>
-                    </select></div>
-                <div class="input-row"><label>비고</label><input type="text"></div>
-            </section>
+            <div class="window-body">
+                <!-- Main Grid -->
+                <div class="main-grid-area">
+                    <div class="data-grid-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35px;">No</th>
+                                    <th style="width: 250px;">제품명</th>
+                                    <th style="width: 60px;">수량</th>
+                                    <th style="width: 100px;">단가</th>
+                                    <th style="width: 110px;">공급가액</th>
+                                    <th>비고</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sales-grid-body"></tbody>
+                        </table>
+                    </div>
+                    <!-- Memo / Footer Small Box -->
+                    <div style="height:60px; display:flex; gap:4px; padding-top:4px;">
+                        <div class="group-box flex-1">
+                            <div class="group-box-title">메모</div>
+                            <textarea
+                                style="width:100%; height:100%; border:none; background:transparent; font-size:11px; outline:none;"
+                                placeholder="내용을 입력하세요"></textarea>
+                        </div>
+                        <div class="group-box" style="width:250px;">
+                            <div class="group-box-title">집계 내역</div>
+                            <div style="font-size:11px; line-height:1.2;">
+                                공급가액: <span id="sum-supply" style="float:right;">0</span><br>
+                                부가세액: <span id="sum-tax" style="float:right;">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="data-grid-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 40px;">No</th>
-                            <th style="width: 120px;">제품명</th>
-                            <th style="width: 80px;">수량</th>
-                            <th style="width: 120px;">단가</th>
-                            <th style="width: 150px;">공급가액</th>
-                            <th style="width: 120px;">부가세</th>
-                            <th>비고</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sales-grid-body">
-                        <!-- JavaScript will fill 25 rows here -->
-                    </tbody>
-                </table>
+                <!-- Right Sidebar (History) -->
+                <div class="side-info-area">
+                    <div class="side-table-container">
+                        <div style="background:#475569; color:#fff; font-size:10px; padding:2px 6px;">거래 상세 내역</div>
+                        <table class="side-table">
+                            <thead>
+                                <tr>
+                                    <th>일자</th>
+                                    <th>품명</th>
+                                    <th>수량</th>
+                                </tr>
+                            </thead>
+                            <tbody id="side-history-body">
+                                <tr>
+                                    <td colspan="3" align="center" style="color:#999; padding:20px 0;">거래처 선택 시 표시</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="side-table-container" style="height:150px; flex:none;">
+                        <div style="background:#475569; color:#fff; font-size:10px; padding:2px 6px;">제품 재고</div>
+                        <table class="side-table">
+                            <thead>
+                                <tr>
+                                    <th>제품</th>
+                                    <th>재고</th>
+                                </tr>
+                            </thead>
+                            <tbody id="side-stock-body"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <footer class="summary-bar">
-                <div>공급가액: <span class="summary-value" id="sum-supply">850,000</span></div>
-                <div>부가세: <span class="summary-value" id="sum-tax">85,000</span></div>
-                <div><span id="total-label">매출총액</span>: <span class="summary-value"
-                        style="font-size: 20px; color: var(--danger);" id="sum-total">935,000</span></div>
+            <footer class="window-footer">
+                <div class="bottom-summary">
+                    <div><span class="summary-label">전일잔액:</span> 0</div>
+                    <div><span class="summary-label">판매합계:</span> <span id="sum-total-footer"
+                            class="summary-amount">0</span></div>
+                    <div><span class="summary-label">입금금액:</span> 0</div>
+                    <div><span class="summary-label">현재잔액:</span> 0</div>
+                </div>
             </footer>
         </div>
 
@@ -930,22 +1077,20 @@
             transactions: []
         };
 
-        // Real-time Listeners (다른 전자기기에서 수정 시 즉시 반영됨)
+        // Real-time Listeners
         function initSync() {
-            // 거래처 실시간 동기화
             db.collection("customers").onSnapshot((snapshot) => {
                 DB.customers = snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
                 renderCustomerTable();
+                updateDatalists(); // 기존 입력창 유지하며 목록만 갱신
             });
 
-            // 제품 실시간 동기화
             db.collection("products").onSnapshot((snapshot) => {
                 DB.products = snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
                 renderProductTable();
-                renderSalesGrid(); // 매출 입력창의 그리드도 갱신
+                updateDatalists();
             });
 
-            // 거래내역 실시간 동기화
             db.collection("transactions").onSnapshot((snapshot) => {
                 DB.transactions = snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
                 renderInquiryTable();
@@ -1298,10 +1443,10 @@
 
         async function saveTransaction() {
             const type = document.getElementById('trade-type-select').value;
-            const customerInput = document.querySelector('#sales-reg .form-container input');
+            const customerInput = document.getElementById('sales-customer-input');
             const customer = customerInput ? customerInput.value : '';
-            const dateInput = document.querySelector('#sales-reg input[type="date"]');
-            const date = dateInput ? dateInput.value : '';
+            const memoText = document.querySelector('#sales-reg textarea')?.value || '';
+            const date = new Date().toISOString().split('T')[0];
 
             const rows = document.querySelectorAll('#sales-grid-body tr');
             const promises = [];
@@ -1310,22 +1455,31 @@
                 const pname = row.querySelector('.input-pname')?.value;
                 const qty = parseInt(row.querySelector('.input-qty')?.value) || 0;
                 const price = parseInt(row.querySelector('.input-price')?.value) || 0;
+                const rowMemo = row.querySelector('.input-row-memo')?.value || '';
 
                 if (pname && qty > 0) {
                     const transData = {
                         date, type, customer, pname, qty, price,
                         supply: qty * price,
                         tax: Math.floor(qty * price * 0.1),
+                        memo: memoText, // 전체 메모
+                        rowMemo: rowMemo, // 행별 비고
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     };
                     promises.push(saveData('transaction', transData));
                 }
             });
 
+            if (promises.length === 0) {
+                alert('저장할 항목이 없습니다.');
+                return;
+            }
+
             try {
                 await Promise.all(promises);
                 alert('전표가 저장되었습니다.');
-                renderSalesGrid(); // 입력창 초기화
+                renderSalesGrid(); // 저장 후에는 클리어
+                if (customer) updateCustomerHistory(customer);
             } catch (err) {
                 console.error(err);
                 alert('저장 중 오류가 발생했습니다.');
@@ -1343,76 +1497,224 @@
                 <tr>
                     <td align="center">${t.date}</td>
                     <td>${t.customer}</td>
-                    <td align="right">-</td>
+                    <td style="font-weight:bold; color:#1e293b;">${t.pname || '-'}</td>
+                    <td align="center">${t.type === 'sales' ? '매출' : '매입'}</td>
                     <td align="right">${t.qty}</td>
-                    <td align="right">${t.price.toLocaleString()}</td>
-                    <td align="right">${(t.supply + t.tax).toLocaleString()}</td>
-                    <td align="right">0</td>
+                    <td align="right">${(t.price || 0).toLocaleString()}</td>
+                    <td align="right" style="font-weight:bold;">${(t.supply || 0).toLocaleString()}</td>
                     <td align="right">-</td>
                 </tr>
             `).join('');
         }
 
         // --- Sales Logic ---
+        function updateDatalists() {
+            // 제품 목록 datalist
+            let prodDl = document.getElementById('product-list-dl');
+            if (!prodDl) {
+                prodDl = document.createElement('datalist');
+                prodDl.id = 'product-list-dl';
+                document.body.appendChild(prodDl);
+            }
+            prodDl.innerHTML = DB.products.map(p => `<option value="${p.name}">`).join('');
+
+            // 거래처 목록 datalist
+            let custDl = document.getElementById('customer-list-dl');
+            if (!custDl) {
+                custDl = document.createElement('datalist');
+                custDl.id = 'customer-list-dl';
+                document.body.appendChild(custDl);
+            }
+            custDl.innerHTML = DB.customers.map(c => `<option value="${c.name}">`).join('');
+        }
+
         function renderSalesGrid() {
             const tbody = document.getElementById('sales-grid-body');
             if (!tbody) return;
+
+            updateDatalists();
+
             let html = '';
             const minRows = 25;
-
-            // 샘플 데이터 포함
-            html += `
-                <tr>
-                    <td align="right" style="background:#f1f5f9; color:#64748b; width:35px;">1</td>
-                    <td><input type="text" value="IP 카메라 400만 화소" class="input-pname"></td>
-                    <td><input type="number" value="10" class="input-qty"></td>
-                    <td><input type="number" value="85000" class="input-price"></td>
-                    <td align="right" class="cell-supply">850,000</td>
-                    <td align="right" class="cell-tax">85,000</td>
-                    <td><input type="text"></td>
-                </tr>
-            `;
-
-            for (let i = 1; i < minRows; i++) {
+            for (let i = 0; i < minRows; i++) {
                 html += `
                     <tr>
-                        <td align="right" style="background:#f1f5f9; color:#94a3b8;">${i + 1}</td>
-                        <td><input type="text"></td>
-                        <td><input type="number" class="input-qty"></td>
-                        <td><input type="number" class="input-price"></td>
-                        <td align="right" class="cell-supply"></td>
-                        <td align="right" class="cell-tax"></td>
-                        <td><input type="text"></td>
+                        <td align="right" style="background:#f1f5f9; color:#94a3b8; font-size:10px;">${i + 1}</td>
+                        <td><input type="text" class="input-pname" list="product-list-dl" autocomplete="off" lang="ko" spellcheck="false" style="ime-mode:active;"></td>
+                        <td><input type="text" class="input-qty" style="text-align:center; ime-mode:active;" autocomplete="off" onfocus="this.select()" oninput="this.value=this.value.replace(/[^0-9.-]/g,'')"></td>
+                        <td><input type="text" class="input-price" style="text-align:right; ime-mode:active;" autocomplete="off" onfocus="this.select()" oninput="this.value=this.value.replace(/[^0-9.-]/g,'')"></td>
+                        <td align="right" class="cell-supply" style="font-weight:bold; color:#1e293b;"></td>
+                        <td><input type="text" class="input-row-memo" lang="ko" spellcheck="false" style="ime-mode:active;" autocomplete="off" onfocus="this.select()"></td>
                     </tr>
                 `;
             }
             tbody.innerHTML = html;
+            // 상단 초기화
+            const custInput = document.getElementById('sales-customer-input');
+            if (custInput) custInput.value = '';
+            const memoArea = document.querySelector('#sales-reg textarea');
+            if (memoArea) memoArea.value = '';
+
+            updateTotals();
         }
 
+        function updateCustomerHistory(customerName) {
+            const historyBody = document.getElementById('side-history-body');
+            if (!historyBody) return;
+            const matches = DB.transactions.filter(t => t.customer === customerName).slice(-10);
+            if (matches.length === 0) {
+                historyBody.innerHTML = '<tr><td colspan="3" align="center" style="padding:10px; color:#999;">기존 내역 없음</td></tr>';
+                return;
+            }
+            historyBody.innerHTML = matches.reverse().map(t => `
+                <tr>
+                    <td align="center">${t.date.split('-').slice(1).join('/')}</td>
+                    <td style="font-size:10px;">${t.pname}</td>
+                    <td align="right">${t.qty}</td>
+                </tr>
+            `).join('');
+        }
+
+        // --- Event Listeners ---
         document.body.addEventListener('input', function (e) {
-            if (e.target.classList.contains('input-qty') || e.target.classList.contains('input-price')) {
-                const row = e.target.closest('tr');
-                const qty = parseFloat(row.querySelector('.input-qty').value) || 0;
-                const price = parseFloat(row.querySelector('.input-price').value) || 0;
+            const target = e.target;
+            const row = target.closest('tr');
+
+            // 1. 거래처 입력 시 즉시 히스토리 로드
+            if (target.id === 'sales-customer-input') {
+                updateCustomerHistory(target.value);
+            }
+
+            if (!row) return;
+
+            // 2. 제품명 입력 시/선택 시 단가 자동 연동
+            if (target.classList.contains('input-pname')) {
+                const pname = target.value.trim();
+                const prod = DB.products.find(p => p.name === pname);
+                if (prod) {
+                    const type = document.getElementById('trade-type-select').value;
+                    row.querySelector('.input-price').value = (type === 'sales' ? prod.sellPrice : prod.buyPrice) || 0;
+                    if (!row.querySelector('.input-qty').value) row.querySelector('.input-qty').value = 1;
+                }
+            }
+
+            // 3. 수량/단가 변경 시 합계 갱신
+            if (target.classList.contains('input-qty') || target.classList.contains('input-price') || target.classList.contains('input-pname')) {
+                const qty = parseFloat(row.querySelector('.input-qty')?.value) || 0;
+                const price = parseFloat(row.querySelector('.input-price')?.value) || 0;
                 const supply = qty * price;
-                const tax = Math.floor(supply * 0.1);
-                row.querySelector('.cell-supply').innerText = supply.toLocaleString();
-                row.querySelector('.cell-tax').innerText = tax.toLocaleString();
+                const supplyCell = row.querySelector('.cell-supply');
+                if (supplyCell) supplyCell.innerText = supply > 0 ? supply.toLocaleString() : '';
                 updateTotals();
             }
         });
 
+        // 4. 엔터 키 이동 및 지능형 매칭 로직 (대폭 보강)
+        document.body.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                const target = e.target;
+                const row = target.closest('tr');
+
+                // A. 제품명 필드에서 엔터 시 지능형 매칭
+                if (row && target.classList.contains('input-pname')) {
+                    const val = target.value.trim();
+                    if (val) {
+                        // 정확히 일치하거나, 해당 글자로 시작하는 첫 번째 제품 찾기
+                        const match = DB.products.find(p => p.name === val) ||
+                            DB.products.find(p => p.name.startsWith(val)) ||
+                            DB.products.find(p => p.name.includes(val));
+
+                        if (match) {
+                            target.value = match.name; // 전체 이름으로 자동 완성
+                            const type = document.getElementById('trade-type-select').value;
+                            row.querySelector('.input-price').value = (type === 'sales' ? match.sellPrice : match.buyPrice) || 0;
+                            if (!row.querySelector('.input-qty').value) row.querySelector('.input-qty').value = 1;
+                            updateTotals();
+                        }
+                    }
+                }
+
+                // B. 거래처 필드에서 엔터 시 지능형 매칭
+                if (target.id === 'sales-customer-input') {
+                    const val = target.value.trim();
+                    if (val) {
+                        const match = DB.customers.find(c => c.name === val) ||
+                            DB.customers.find(c => c.name.startsWith(val)) ||
+                            DB.customers.find(c => c.name.includes(val));
+                        if (match) {
+                            target.value = match.name;
+                            updateCustomerHistory(match.name);
+                        }
+                    }
+                }
+
+                // C. 포커스 자동 이동
+                if (row && row.parentElement.id === 'sales-grid-body') {
+                    if (target.classList.contains('input-pname')) {
+                        // 제품명이 등록된 것인지 최종 확인 후 이동
+                        const val = target.value.trim();
+                        if (DB.products.find(p => p.name === val)) {
+                            e.preventDefault();
+                            row.querySelector('.input-qty').focus();
+                        } else {
+                            e.preventDefault(); // 매칭 안되면 이동 불가
+                            target.value = '';  // 잘못된 입력 소거
+                            updateTotals();
+                        }
+                    } else if (target.classList.contains('input-qty')) {
+                        e.preventDefault();
+                        row.querySelector('.input-price').focus();
+                    } else if (target.classList.contains('input-price')) {
+                        e.preventDefault();
+                        const nextRow = row.nextElementSibling;
+                        if (nextRow) {
+                            nextRow.querySelector('.input-pname').focus();
+                        }
+                    }
+                } else if (target.id === 'sales-customer-input') {
+                    const val = target.value.trim();
+                    if (DB.customers.find(c => c.name === val)) {
+                        e.preventDefault();
+                        const firstPname = document.querySelector('#sales-grid-body .input-pname');
+                        if (firstPname) firstPname.focus();
+                    } else {
+                        e.preventDefault();
+                        target.value = ''; // 등록 안된 거래처 소거
+                    }
+                }
+            }
+        });
+
+        // 5. 유효성 검사 및 데이터 정합성 유지
+
+        document.body.addEventListener('change', function (e) {
+            const target = e.target;
+            if (target.classList.contains('input-pname')) {
+                const val = target.value.trim();
+                const match = DB.products.find(p => p.name === val);
+                if (!match) {
+                    target.value = ''; // 등록 안된 제품은 무조건 지움 (직접 입력 차단)
+                    updateTotals();
+                }
+            }
+            if (target.id === 'sales-customer-input') {
+                const val = target.value.trim();
+                if (val && !DB.customers.find(c => c.name === val)) {
+                    target.value = ''; // 등록 안된 거래처 지움
+                }
+            }
+        });
+
         function updateTotals() {
-            let totalSupply = 0; let totalTax = 0;
+            let totalSupply = 0;
             document.querySelectorAll('.cell-supply').forEach(td => {
                 totalSupply += parseFloat(td.innerText.replace(/,/g, '')) || 0;
             });
-            document.querySelectorAll('.cell-tax').forEach(td => {
-                totalTax += parseFloat(td.innerText.replace(/,/g, '')) || 0;
-            });
-            document.getElementById('sum-supply').innerText = totalSupply.toLocaleString();
-            document.getElementById('sum-tax').innerText = totalTax.toLocaleString();
-            document.getElementById('sum-total').innerText = (totalSupply + totalTax).toLocaleString();
+            const tax = Math.floor(totalSupply * 0.1);
+            if (document.getElementById('sum-supply')) document.getElementById('sum-supply').innerText = totalSupply.toLocaleString();
+            if (document.getElementById('sum-tax')) document.getElementById('sum-tax').innerText = tax.toLocaleString();
+            const total = totalSupply + tax;
+            if (document.getElementById('sum-total-footer')) document.getElementById('sum-total-footer').innerText = total.toLocaleString();
         }
 
         renderSalesGrid();
