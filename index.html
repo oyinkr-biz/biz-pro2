@@ -475,7 +475,7 @@
     <!-- System Info Bar -->
     <header class="system-bar">
         <div>
-            <strong>(비즈테크) For BizTech Edition Ver 1.12.57 (데이터 제어)</strong> - 사용자: 관리자
+            <strong>(비즈테크) For BizTech Edition Ver 1.12.58 (데이터 제어)</strong> - 사용자: 관리자
         </div>
         <div id="system-date-display">2026-02-05 (수요일) | 온라인 지원 연동 중</div>
     </header>
@@ -962,15 +962,15 @@
                     </div>
                 </div>
 
-                <!-- Right Side: Ver 48 Original (과세구분 Left | 결제사항 등록 Right) -->
+                <!-- Right Side: Ver 48 (과세구분 Left | 결제사항 등록 Right) -->
                 <div class="group-box"
-                    style="flex: 1; height: 100%; margin-top: 2px; padding: 0; overflow: visible; display: flex;">
+                    style="flex: 1; height: 100%; margin-top: 2px; padding: 0; overflow: hidden; display: flex;">
                     <!-- 1. 과세 구분 (Left) -->
                     <div
-                        style="width: 140px; display: flex; flex-direction: column; justify-content: space-around; padding: 12px 10px 8px 10px; border-right: 1px solid #94a3b8; position: relative; font-size: 12px;">
-                        <div class="group-box-title"
-                            style="top: -8px; left: 10px; position: absolute; background: #e2e8f0; padding: 0 4px;">과세
-                            구분</div>
+                        style="width: 140px; display: flex; flex-direction: column; justify-content: space-around; padding: 4px 10px 8px 10px; border-right: 1px solid #94a3b8; font-size: 12px;">
+                        <div
+                            style="font-size:11px; font-weight:bold; color:#1e293b; border-bottom:1px solid #cbd5e1; padding-bottom:3px; margin-bottom:2px;">
+                            과세 구분</div>
                         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input
                                 type="radio" name="tax-opt"> 세금계산서</label>
                         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input
@@ -987,36 +987,37 @@
                     </div>
                     <!-- 2. 결제사항 등록 (Right) -->
                     <div
-                        style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 12px 10px 8px 10px; position: relative;">
-                        <div class="group-box-title"
-                            style="top: -8px; left: 10px; position: absolute; background: #e2e8f0; padding: 0 4px;">결제사항
-                            등록</div>
+                        style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 4px 10px 8px 10px; background: #f8fafc;">
+                        <div
+                            style="font-size:11px; font-weight:bold; color:#1e293b; border-bottom:1px solid #cbd5e1; padding-bottom:3px; margin-bottom:2px;">
+                            결제사항 등록</div>
                         <div style="display: flex; align-items: center; gap: 4px;">
                             <label style="width: 45px; font-size: 12px;">현금</label>
                             <input type="text" id="pay-cash"
-                                style="flex: 1; text-align: right; font-size: 14px; height: 26px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
+                                style="flex: 1; text-align: right; font-size: 14px; height: 24px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();">
                         </div>
                         <div style="display: flex; align-items: center; gap: 4px;">
                             <label style="width: 45px; font-size: 12px;">할인</label>
                             <input type="text" id="pay-discount"
-                                style="flex: 1; text-align: right; font-size: 14px; height: 26px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
+                                style="flex: 1; text-align: right; font-size: 14px; height: 24px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();">
                         </div>
                         <div style="display: flex; align-items: center; gap: 4px;">
                             <label style="width: 45px; font-size: 12px;">통장</label>
                             <input type="text" id="pay-bank"
-                                style="flex: 1; text-align: right; font-size: 14px; height: 26px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
+                                style="flex: 1; text-align: right; font-size: 14px; height: 24px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();">
                         </div>
                         <div style="display: flex; align-items: center; gap: 4px;">
                             <label style="width: 45px; font-size: 12px;">카드</label>
                             <input type="text" id="pay-card"
-                                style="flex: 1; text-align: right; font-size: 14px; height: 26px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
+                                style="flex: 1; text-align: right; font-size: 14px; height: 24px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();">
                         </div>
                     </div>
                 </div>
+
 
             </div>
 
