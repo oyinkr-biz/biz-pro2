@@ -475,7 +475,7 @@
     <!-- System Info Bar -->
     <header class="system-bar">
         <div>
-            <strong>(비즈테크) For BizTech Edition Ver 1.12.55 (데이터 제어)</strong> - 사용자: 관리자
+            <strong>(비즈테크) For BizTech Edition Ver 1.12.56 (데이터 제어)</strong> - 사용자: 관리자
         </div>
         <div id="system-date-display">2026-02-05 (수요일) | 온라인 지원 연동 중</div>
     </header>
@@ -962,61 +962,62 @@
                     </div>
                 </div>
 
-                <!-- Right Side: Ver 48 Original (\uacfc\uc138\uad6c\ubd84 Left | \uacb0\uc81c\uc0ac\ud56d \ub4f1\ub85d Right) -->
+                <!-- Right Side: Ver 48 Original (과세구분 Left | 결제사항 등록 Right) -->
                 <div class="group-box"
                     style="flex: 1; height: 100%; margin-top: 2px; padding: 0; overflow: hidden; display: flex;">
-                    <!-- 1. \uacfc\uc138 \uad6c\ubd84 (Left) -->
+                    <!-- 1. 과세 구분 (Left) -->
                     <div
                         style="width: 140px; display: flex; flex-direction: column; justify-content: space-around; padding: 12px 10px 8px 10px; border-right: 1px solid #94a3b8; position: relative; font-size: 12px;">
                         <div class="group-box-title"
-                            style="top: -8px; left: 10px; position: absolute; background: #e2e8f0; padding: 0 4px;">
-                            \uacfc\uc138 \uad6c\ubd84</div>
+                            style="top: -8px; left: 10px; position: absolute; background: #e2e8f0; padding: 0 4px;">과세
+                            구분</div>
                         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input
-                                type="radio" name="tax-opt"> \uc138\uae08\uacc4\uc0b0\uc11c</label>
+                                type="radio" name="tax-opt"> 세금계산서</label>
                         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input
-                                type="radio" name="tax-opt" checked> \uacc4\uc0b0\uc11c</label>
+                                type="radio" name="tax-opt" checked> 계산서</label>
                         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input
-                                type="checkbox"> \ubd80\uac00\uc138\ubcc4\ub3c4</label>
+                                type="checkbox"> 부가세별도</label>
                         <div
                             style="border-top: 1px solid #94a3b8; padding-top: 4px; display: flex; gap: 8px; align-items: center;">
                             <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;"><input
-                                    type="radio" name="pay-type"> \uc601\uc218</label>
+                                    type="radio" name="pay-type"> 영수</label>
                             <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;"><input
-                                    type="radio" name="pay-type" checked> \uccad\uad6c</label>
+                                    type="radio" name="pay-type" checked> 청구</label>
                         </div>
                     </div>
-                    <!-- 2. \uacb0\uc81c\uc0ac\ud56d \ub4f1\ub85d (Right) -->
+                    <!-- 2. 결제사항 등록 (Right) -->
                     <div
                         style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 12px 10px 8px 10px; position: relative;">
                         <div class="group-box-title"
-                            style="top: -8px; left: 10px; position: absolute; background: #e2e8f0; padding: 0 4px;">
-                            \uacb0\uc81c\uc0ac\ud56d \ub4f1\ub85d</div>
+                            style="top: -8px; left: 10px; position: absolute; background: #e2e8f0; padding: 0 4px;">결제사항
+                            등록</div>
                         <div style="display: flex; align-items: center; gap: 4px;">
-                            <label style="width: 45px; font-size: 12px;">\ud604\uae08</label>
+                            <label style="width: 45px; font-size: 12px;">현금</label>
                             <input type="text" id="pay-cash"
                                 style="flex: 1; text-align: right; font-size: 14px; height: 26px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();">
                         </div>
                         <div style="display: flex; align-items: center; gap: 4px;">
-                            <label style="width: 45px; font-size: 12px;">\ud560\uc778</label>
+                            <label style="width: 45px; font-size: 12px;">할인</label>
                             <input type="text" id="pay-discount"
                                 style="flex: 1; text-align: right; font-size: 14px; height: 26px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();">
                         </div>
                         <div style="display: flex; align-items: center; gap: 4px;">
-                            <label style="width: 45px; font-size: 12px;">\ud1b5\uc7a5</label>
+                            <label style="width: 45px; font-size: 12px;">통장</label>
                             <input type="text" id="pay-bank"
                                 style="flex: 1; text-align: right; font-size: 14px; height: 26px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();">
                         </div>
                         <div style="display: flex; align-items: center; gap: 4px;">
-                            <label style="width: 45px; font-size: 12px;">\uce74\ub4dc</label>
+                            <label style="width: 45px; font-size: 12px;">카드</label>
                             <input type="text" id="pay-card"
                                 style="flex: 1; text-align: right; font-size: 14px; height: 26px; font-weight: bold; border: 1px solid #94a3b8; padding: 0 8px; background: white;"
                                 oninput="this.value=this.value.replace(/[^0-9]/g,''); updateTotals();">
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="window-body">
