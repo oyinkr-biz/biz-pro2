@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(비즈테크) For BizTech Edition - Classic ERP</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <!-- System Info Bar -->
+    <header class="system-bar">
+        <div>
+            <strong>(비즈테크) For BizTech Edition Ver 0.0.2</strong> - 사용자: 관리자
+        </div>
+        <div>2026-02-04 (수요일) | 온라인 지원 연동 중</div>
+    </header>
+
+    <!-- Main Menu Bar -->
+    <nav class="menu-bar">
+        <div class="menu-item">
+            파일(F)
+            <div class="dropdown-menu">
+                <div class="dropdown-item">로그인 / 로그아웃</div>
+                <div class="dropdown-item">비밀번호 변경</div>
+                <div class="dropdown-item" onclick="location.reload()">새로고침(F5)</div>
+                <div class="dropdown-item">종료</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            매입 & 매출관리(G)
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="showWindow('sales-reg'); switchTradeType('sales');">매출 등록</div>
+                <div class="dropdown-item" onclick="showWindow('sales-reg'); switchTradeType('purchase');">매입 등록</div>
+                <div class="dropdown-item">수금 등록(입금)</div>
+                <div class="dropdown-item">지급 등록(출금)</div>
+                <div class="dropdown-item">지출 결의서 작성</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            조회메뉴
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="showWindow('complex-inquiry')">거래처 기간별 매입/매출 조회</div>
+                <div class="dropdown-item">일반 매입/매출 현황</div>
+                <div class="dropdown-item">거래처 조회</div>
+                <div class="dropdown-item">기간별 재고현황</div>
+                <div class="dropdown-item">제품별 누적 재고현황</div>
+                <div class="dropdown-item">분류별 매입/매출 현황</div>
+                <div class="dropdown-item">담당자별 매입/매출 현황</div>
+                <div class="dropdown-item">거래처 제품별 매입/매출 현황</div>
+                <div class="dropdown-item">거래처 일자별 매입/매출 현황</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            조회메뉴 2
+            <div class="dropdown-menu">
+                <div class="dropdown-item">매입처 미지급 현황</div>
+                <div class="dropdown-item">매출처 미수금 현황</div>
+                <div class="dropdown-item">거래처 입출금 현황</div>
+                <div class="dropdown-item">월간 영업 캘린더</div>
+                <div class="dropdown-item">거래처 일별 집계</div>
+                <div class="dropdown-item">일일 거래마감 현황</div>
+                <div class="dropdown-item">현금시세 입력</div>
+                <div class="dropdown-item">지출전표 작성</div>
+                <div class="dropdown-item">세금계산서 작성 내역</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            기초자료 관리(C)
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="showWindow('company-reg')">사업체등록</div>
+                <div class="dropdown-item" onclick="showWindow('customer-reg')">거래처등록 / 조회</div>
+                <div class="dropdown-item" onclick="showWindow('product-reg')">제품등록 / 조회</div>
+                <div class="dropdown-item">기본정보등록</div>
+                <div class="dropdown-item" onclick="showWindow('settings-window')">환경설정</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            창(W)
+            <div class="dropdown-menu">
+                <div class="dropdown-item">모두 닫기</div>
+                <div class="dropdown-item">계단식 배열</div>
+            </div>
+        </div>
+        <div class="menu-item">온라인 원격제어</div>
+    </nav>
+
+    <main class="workspace">
+        <!-- 1. 거래처 등록 윈도우 (사진 KakaoTalk_20260204_114912544.jpg 기반) -->
+        <div id="customer-reg" class="erp-window" style="display: none;">
+            <div class="window-title-bar">
+                <i data-lucide="users" style="width: 14px; margin-right: 8px;"></i> 거래처 등록
+                <div class="window-controls">
+                    <div class="win-btn" onclick="minimizeWindow('customer-reg')">_</div>
+                    <div class="win-btn" onclick="maximizeWindow('customer-reg')">□</div>
+                    <div class="win-btn close-btn" onclick="hideWindow('customer-reg')"
+                        style="background: var(--accent-error); color: white;">×</div>
+                </div>
+            </div>
+
+            <div class="erp-toolbar">
+                <button class="tool-btn" onclick="newCustomer()"><i data-lucide="user-plus"></i> 신규(F3)</button>
+                <button class="tool-btn" onclick="deleteCustomer()"><i data-lucide="trash-2"></i> 삭제</button>
+                <button class="tool-btn" onclick="saveCustomer()" style="background: #e3f2fd;"><i
+                        data-lucide="save"></i> 저장(F8)</button>
+                <button class="tool-btn" onclick="newCustomer()"><i data-lucide="refresh-cw"></i> 초기화</button>
+                <div style="margin-left: auto; display: flex; align-items: center; gap: 5px;">
+                    <i data-lucide="search" style="width:14px;"></i>
+                    <input type="text" id="cust-search" placeholder="거래처 검색..." oninput="renderCustomerTable()"
+                        style="padding: 2px 5px; font-size: 12px; border: 1px solid #ccc;">
+                </div>
+                <button class="tool-btn" onclick="hideWindow('customer-reg')"><i data-lucide="x-circle"></i>
+                    종료(F10)</button>
+            </div>
+
+            <section class="form-container" style="grid-template-columns: repeat(3, 1fr);">
+                <!-- 행 1 -->
+                <div class="input-row"><label>거래처코드</label><input type="text" readonly></div>
+                <div class="input-row"><label>사업자번호</label><input type="text"></div>
+                <div class="input-row"><label>대표자명</label><input type="text"></div>
+
+                <!-- 행 2 -->
+                <div class="input-row"><label>구분</label><select>
+                        <option>매출처</option>
+                        <option>매입처</option>
+                    </select></div>
+                <div class="input-row"><label>업태</label><input type="text"></div>
+                <div class="input-row"><label>전화번호</label><input type="text"></div>
+
+                <!-- 행 3 -->
+                <div class="input-row"><label>거래처명</label><input type="text"></div>
+                <div class="input-row"><label>종목</label><input type="text"></div>
+                <div class="input-row"><label>휴대폰</label><input type="text"></div>
+
+                <!-- 행 4 -->
+                <div class="input-row"><label>담당자</label><input type="text"></div>
+                <div class="input-row"><label>이메일</label><input type="text"></div>
+                <div class="input-row"><label>비고</label><input type="text"></div>
+
+                <!-- 주소 (전체 너비) -->
+                <div class="input-row" style="grid-column: span 3;"><label>사업장주소</label><input type="text"></div>
+            </section>
+
+            <div class="data-grid-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 35px;">No</th>
+                            <th style="width: 60px;">코드</th>
+                            <th style="width: 80px;">구분</th>
+                            <th>거래처명</th>
+                            <th>사업자번호</th>
+                            <th>대표자</th>
+                            <th>전화번호</th>
+                            <th>휴대폰</th>
+                            <th>담당자</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td align="center">1</td>
+                            <td>(주) 비즈테크</td>
+                            <td>123-45-67890</td>
+                            <td>안관리</td>
+                            <td>02-1234-5678</td>
+                            <td>010-1111-2222</td>
+                            <td>김철수</td>
+                            <td>주거래처</td>
+                        </tr>
+                        <tr>
+                            <td align="center">2</td>
+                            <td>미래보안 기술</td>
+                            <td>505-11-22334</td>
+                            <td>이대표</td>
+                            <td>031-987-6543</td>
+                            <td>010-9999-8888</td>
+                            <td>박영희</td>
+                            <td>미결제 주의</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 5. 거래처 기간별 매입/매출 조회 (사진 113713 기반) -->
+        <div id="complex-inquiry" class="erp-window" style="display: none;">
+            <div class="window-title-bar">
+                <i data-lucide="search" style="width: 14px; margin-right: 8px;"></i> 거래처 기간별 매입/매출 조회
+                <div class="window-controls">
+                    <div class="win-btn" onclick="minimizeWindow('complex-inquiry')">_</div>
+                    <div class="win-btn" onclick="maximizeWindow('complex-inquiry')">□</div>
+                    <div class="win-btn close-btn" onclick="hideWindow('complex-inquiry')"
+                        style="background: var(--accent-error); color: white;">×</div>
+                </div>
+            </div>
+            <div class="erp-toolbar">
+                <button class="tool-btn"><i data-lucide="search"></i> 조회(F2)</button>
+                <button class="tool-btn"><i data-lucide="printer"></i> 출력(F11)</button>
+                <button class="tool-btn"><i data-lucide="file-spreadsheet"></i> 엑셀변환(F12)</button>
+                <button class="tool-btn" onclick="hideWindow('complex-inquiry')"><i data-lucide="x-circle"></i>
+                    종료(F10)</button>
+            </div>
+            <section class="form-container" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="input-row"><label>거래일자</label><input type="date" value="2026-02-01"> ~ <input type="date"
+                        value="2026-02-04"></div>
+                <div class="input-row"><label>거래구분</label><select>
+                        <option>전체</option>
+                        <option>매출</option>
+                        <option>매입</option>
+                    </select></div>
+                <div class="input-row"><label>거래처</label><input type="text" placeholder="거래처 검색"></div>
+                <div class="input-row"><label>조회구분</label><select>
+                        <option>1 단계</option>
+                    </select></div>
+            </section>
+            <div class="data-grid-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>거래일자</th>
+                            <th>거래처명</th>
+                            <th>전일잔액</th>
+                            <th>매출수량</th>
+                            <th>단가</th>
+                            <th>총금액</th>
+                            <th>입금금액</th>
+                            <th>잔액</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td align="center">2026-02-04</td>
+                            <td>(주) 비즈테크</td>
+                            <td align="right">250,000</td>
+                            <td align="right">10</td>
+                            <td align="right">85,000</td>
+                            <td align="right">935,000</td>
+                            <td align="right">0</td>
+                            <td align="right">1,185,000</td>
+                        </tr>
+                        <tr style="background:#fff8e1; font-weight:bold;">
+                            <td colspan="2" align="center">합 계</td>
+                            <td></td>
+                            <td align="right">10</td>
+                            <td></td>
+                            <td align="right">935,000</td>
+                            <td align="right">0</td>
+                            <td align="right">1,185,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 6. 환경설정 윈도우 (사진 113841 기반) -->
+        <div id="settings-window" class="erp-window"
+            style="display: none; height: 600px; width: 800px; left: 100px; top: 100px;">
+            <div class="window-title-bar">
+                <i data-lucide="settings" style="width: 14px; margin-right: 8px;"></i> 환경설정
+                <div class="window-controls">
+                    <div class="win-btn" onclick="minimizeWindow('settings-window')">_</div>
+                    <div class="win-btn" onclick="maximizeWindow('settings-window')">□</div>
+                    <div class="win-btn close-btn" onclick="hideWindow('settings-window')"
+                        style="background: var(--accent-error); color: white;">×</div>
+                </div>
+            </div>
+            <div style="background: #ccc; padding: 10px; color: #e81123; font-weight: bold; text-align: center;">로그인 계정
+                및 프로그램 환경설정</div>
+            <div class="erp-toolbar" style="justify-content: flex-end;">
+                <button class="tool-btn"><i data-lucide="save"></i> 저장후닫기</button>
+                <button class="tool-btn" onclick="hideWindow('settings-window')">닫기</button>
+            </div>
+            <div style="display: flex; flex: 1; border-top: 1px solid #888;">
+                <div style="width: 150px; background: #eee; border-right: 1px solid #ccc; padding: 10px;">
+                    <div
+                        style="padding: 8px; background: #fff; border: 1px solid #aaa; margin-bottom: 4px; font-size: 12px; font-weight: bold;">
+                        로그인 계정</div>
+                    <div style="padding: 8px; font-size: 12px;">환경설정</div>
+                    <div style="padding: 8px; font-size: 12px;">업체기본정보</div>
+                    <div style="padding: 8px; font-size: 12px;">통장관리</div>
+                    <div style="padding: 8px; font-size: 12px;">SMS 설정</div>
+                </div>
+                <div style="flex: 1; background: #fff; padding: 15px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>로그인명</th>
+                                <th>비밀번호</th>
+                                <th>수정</th>
+                                <th>삭제</th>
+                                <th>매입매출</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>관리자</td>
+                                <td>****</td>
+                                <td align="center">V</td>
+                                <td align="center">V</td>
+                                <td align="center">V</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 2. 매입/매출 통합 등록 윈도우 -->
+        <div id="sales-reg" class="erp-window" style="display: none;">
+            <div class="window-title-bar" id="reg-title-bar">
+                <i data-lucide="shopping-cart" style="width: 14px; margin-right: 8px;"></i> <span id="reg-title">매출
+                    등록</span>
+                <div class="window-controls">
+                    <div class="win-btn" onclick="minimizeWindow('sales-reg')">_</div>
+                    <div class="win-btn" onclick="maximizeWindow('sales-reg')">□</div>
+                    <div class="win-btn close-btn" onclick="hideWindow('sales-reg')"
+                        style="background: var(--accent-error); color: white;">×</div>
+                </div>
+            </div>
+
+            <div class="erp-toolbar">
+                <div
+                    style="display: flex; align-items: center; background: #fff; border: 1px solid #aaa; padding: 2px 10px; margin-right: 15px;">
+                    <label style="font-size: 12px; font-weight: bold; margin-right: 10px;">처리구분:</label>
+                    <select id="trade-type-select" onchange="switchTradeType(this.value)"
+                        style="border: none; outline: none; font-weight: bold; color: #004d99; cursor: pointer;">
+                        <option value="sales">매출 등록 (판매)</option>
+                        <option value="purchase">매입 등록 (구매)</option>
+                    </select>
+                </div>
+                <div id="toolbar-btns" style="display: flex; gap: 5px;">
+                    <button class="tool-btn"><i data-lucide="bar-chart-2"></i> 통계(F2)</button>
+                    <button class="tool-btn"><i data-lucide="file-text"></i> 거래명세서(F9)</button>
+                    <button class="tool-btn"><i data-lucide="receipt"></i> 거래영수증(F7)</button>
+                    <button class="tool-btn" onclick="saveTransaction()"
+                        style="background: #e3f2fd; margin-left: 20px;"><i data-lucide="save"></i>
+                        저장(F8)</button>
+                    <button class="tool-btn" onclick="hideWindow('sales-reg')"><i data-lucide="x-circle"></i>
+                        종료(F10)</button>
+                </div>
+            </div>
+
+            <section class="form-container">
+                <div class="input-row"><label id="target-label">매출거래처</label><input type="text" value="(주) 비즈테크"></div>
+                <div class="input-row"><label>거래일자</label><input type="date" value="2026-02-04"></div>
+                <div class="input-row"><label>담당자</label><input type="text" value="홍길동"></div>
+                <div class="input-row"><label>결제방식</label><select>
+                        <option>카드 (외상)</option>
+                        <option>현금</option>
+                        <option>계좌이체</option>
+                    </select></div>
+                <div class="input-row"><label>창고구분</label><select>
+                        <option>본사창고</option>
+                        <option>매장전시</option>
+                    </select></div>
+                <div class="input-row"><label>비고</label><input type="text"></div>
+            </section>
+
+            <div class="data-grid-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;">No</th>
+                            <th style="width: 120px;">제품명</th>
+                            <th style="width: 80px;">수량</th>
+                            <th style="width: 120px;">단가</th>
+                            <th style="width: 150px;">공급가액</th>
+                            <th style="width: 120px;">부가세</th>
+                            <th>비고</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-grid-body">
+                        <!-- JavaScript will fill 25 rows here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <footer class="summary-bar">
+                <div>공급가액: <span class="summary-value" id="sum-supply">850,000</span></div>
+                <div>부가세: <span class="summary-value" id="sum-tax">85,000</span></div>
+                <div><span id="total-label">매출총액</span>: <span class="summary-value"
+                        style="font-size: 20px; color: var(--danger);" id="sum-total">935,000</span></div>
+            </footer>
+        </div>
+
+        <!-- 4. 사업체 등록 윈도우 (신규 추가) -->
+        <div id="company-reg" class="erp-window" style="display: none;">
+            <div class="window-title-bar">
+                <i data-lucide="building" style="width: 14px; margin-right: 8px;"></i> 사업체 등록
+                <div class="window-controls">
+                    <div class="win-btn" onclick="minimizeWindow('company-reg')">_</div>
+                    <div class="win-btn" onclick="maximizeWindow('company-reg')">□</div>
+                    <div class="win-btn close-btn" onclick="hideWindow('company-reg')"
+                        style="background: var(--accent-error); color: white;">×</div>
+                </div>
+            </div>
+
+            <div class="erp-toolbar">
+                <button class="tool-btn" style="background: #e3f2fd;"><i data-lucide="save"></i> 저장(F8)</button>
+                <button class="tool-btn" onclick="hideWindow('company-reg')"><i data-lucide="x-circle"></i>
+                    종료(F10)</button>
+            </div>
+
+            <section class="form-container" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="input-row"><label>사업자번호</label><input type="text" placeholder="000-00-00000"></div>
+                <div class="input-row"><label>법인번호</label><input type="text"></div>
+
+                <div class="input-row"><label>상호명</label><input type="text" value="(주) 비즈테크"></div>
+                <div class="input-row"><label>대표자명</label><input type="text"></div>
+
+                <div class="input-row"><label>업태</label><input type="text"></div>
+                <div class="input-row"><label>종목</label><input type="text"></div>
+
+                <div class="input-row" style="grid-column: span 2;"><label>사업장주소</label><input type="text"></div>
+
+                <div class="input-row"><label>전화번호</label><input type="text"></div>
+                <div class="input-row"><label>팩스번호</label><input type="text"></div>
+
+                <div class="input-row"><label>홈페이지</label><input type="text"></div>
+                <div class="input-row"><label>국세청전송용ID</label><input type="text"></div>
+            </section>
+
+            <div
+                style="padding: 20px; background: #fff; margin: 10px; border: 1px solid #ddd; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div
+                    style="width: 120px; height: 120px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                    <span style="font-size: 12px; color: #999;">인감/도장 이미지</span>
+                </div>
+                <button class="tool-btn">이미지 등록</button>
+            </div>
+        </div>
+        <!-- 3. 제품 등록 윈도우 (구조 수정 완료) -->
+        <div id="product-reg" class="erp-window" style="display: none;">
+            <div class="window-title-bar">
+                <i data-lucide="package" style="width: 14px; margin-right: 8px;"></i> 제품 등록
+                <div class="window-controls">
+                    <div class="win-btn" onclick="minimizeWindow('product-reg')">_</div>
+                    <div class="win-btn" onclick="maximizeWindow('product-reg')">□</div>
+                    <div class="win-btn close-btn" onclick="hideWindow('product-reg')"
+                        style="background: var(--accent-error); color: white;">×</div>
+                </div>
+            </div>
+
+            <!-- TALL TOOLBAR (Screenshot based) -->
+            <div class="erp-toolbar"
+                style="height: 100px; padding: 10px; border-bottom: 2px solid #ccc; background: #e0e4e9; align-items: stretch;">
+                <div style="display: flex; gap: 4px;">
+                    <button class="tool-btn" onclick="newProduct()"><i data-lucide="plus-circle"></i> 신규(F3)</button>
+                    <button class="tool-btn" onclick="deleteProduct()"><i data-lucide="trash-2"></i> 삭제</button>
+                    <button class="tool-btn" onclick="saveProduct()"
+                        style="background: #e3f2fd; border-color:#90caf9;"><i data-lucide="save"></i> 저장(F8)</button>
+                </div>
+
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <div
+                        style="display: flex; align-items: center; gap: 10px; background: #fff; padding: 6px 15px; border: 1px solid #aaa; border-radius: 20px;">
+                        <i data-lucide="search" style="width:18px; color: #666;"></i>
+                        <input type="text" id="prod-search" placeholder="제품 검색..." oninput="renderProductTable()"
+                            style="border: none; outline: none; font-size: 14px; width: 300px;">
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: stretch;">
+                    <button class="tool-btn" onclick="hideWindow('product-reg')" style="height: auto;">
+                        <i data-lucide="x-circle"></i> 종료(F10)
+                    </button>
+                </div>
+            </div>
+
+            <!-- FORM CARD AREA -->
+            <div style="background: #e0e4e9; padding: 15px; flex: 0 0 auto;">
+                <section class="form-container"
+                    style="margin: 0 auto; width: 100%; max-width: 1100px; padding: 25px; border-radius: 0; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); grid-template-columns: repeat(2, 1fr); background: #fff;">
+                    <div class="input-row"><label>제품코드</label><input type="text" readonly
+                            style="background: #f9f9f9; font-weight: bold;"></div>
+                    <div class="input-row"><label>매입단가</label><input type="number"
+                            style="font-weight: bold; color: #d32f2f;"></div>
+
+                    <div class="input-row"><label>제품명</label><input type="text" style="font-weight: bold;"></div>
+                    <div class="input-row"><label>매출단가</label><input type="number"
+                            style="font-weight: bold; color: #1976d2;"></div>
+
+                    <div class="input-row"><label>대분류</label><select>
+                            <option>대분류 1</option>
+                            <option>대분류 2</option>
+                        </select></div>
+                    <div class="input-row"><label>소분류</label><select>
+                            <option>소분류 1</option>
+                            <option>소분류 2</option>
+                        </select></div>
+
+                    <div class="input-row"><label>현재고</label><input type="number" readonly style="background: #eee;">
+                    </div>
+                    <div class="input-row"><label>A 단가</label><input type="number"></div>
+
+                    <div class="input-row" style="grid-column: span 2;"><label>비고</label><input type="text"
+                            style="width: 100%;"></div>
+                </section>
+            </div>
+
+            <!-- GRID AREA -->
+            <div class="data-grid-container" style="margin: 10px 20px 20px 20px;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 35px;">No</th>
+                            <th style="width: 120px;">제품코드</th>
+                            <th>제품명</th>
+                            <th style="width: 120px;">매입가</th>
+                            <th style="width: 120px;">매출가</th>
+                            <th style="width: 120px;">대분류</th>
+                            <th style="width: 120px;">소분류</th>
+                            <th style="width: 80px;">현재고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 데이터 행 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="taskbar" id="taskbar">
+        <!-- Minimized tabs will appear here -->
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // --- Data Management System ---
+        const DB = {
+            customers: JSON.parse(localStorage.getItem('erp_customers')) || [
+                { id: '1001', name: '(주) 비즈테크', bizNo: '123-45-67890', boss: '안관리', tel: '02-1234-5678' }
+            ],
+            products: JSON.parse(localStorage.getItem('erp_products')) || [
+                { id: '1001', name: 'IP 카메라 400만 화소', buyPrice: 65000, sellPrice: 85000, stock: 45, cate1: '대분류 1', subCate1: '소분류 1' }
+            ],
+            transactions: JSON.parse(localStorage.getItem('erp_transactions')) || []
+        };
+
+        function saveData() {
+            localStorage.setItem('erp_customers', JSON.stringify(DB.customers));
+            localStorage.setItem('erp_products', JSON.stringify(DB.products));
+            localStorage.setItem('erp_transactions', JSON.stringify(DB.transactions));
+        }
+
+        // --- Window Management ---
+        let zIndex = 100;
+        let winOffset = 20;
+        let winCount = 0;
+
+        function showWindow(id) {
+            const win = document.getElementById(id);
+            if (win.style.display !== 'flex') {
+                if (!win.dataset.opened) {
+                    winCount++;
+                    win.style.top = (20 + (winCount % 15) * 30) + "px"; // 세로만 어긋나게
+                    win.style.left = "10px"; // 좌측 정렬 고정
+                    makeDraggable(win);
+                    win.dataset.opened = "true";
+                }
+                win.style.display = 'flex';
+            }
+            win.style.zIndex = ++zIndex;
+
+            // If it was minimized, remove from taskbar
+            const taskBtn = document.getElementById('task-' + id);
+            if (taskBtn) taskBtn.remove();
+
+            if (id === 'customer-reg') renderCustomerTable();
+            if (id === 'product-reg') renderProductTable();
+            if (id === 'complex-inquiry') renderInquiryTable();
+            if (id === 'sales-reg') renderSalesGrid();
+        }
+
+        function minimizeWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = 'none';
+
+            const taskbar = document.getElementById('taskbar');
+            if (!document.getElementById('task-' + id)) {
+                const btn = document.createElement('div');
+                btn.id = 'task-' + id;
+                btn.className = 'task-item';
+                const title = win.querySelector('.window-title-bar').innerText.trim().split('\n')[0];
+                btn.innerHTML = `<i data-lucide="window"></i> ${title}`;
+                btn.onclick = () => showWindow(id);
+                taskbar.appendChild(btn);
+                lucide.createIcons();
+            }
+        }
+
+        function maximizeWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.toggle('maximized');
+        }
+
+        function hideWindow(id) {
+            document.getElementById(id).style.display = 'none';
+            const taskBtn = document.getElementById('task-' + id);
+            if (taskBtn) taskBtn.remove();
+        }
+
+        function makeDraggable(el) {
+            const header = el.querySelector('.window-title-bar');
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+            header.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                el.style.zIndex = ++zIndex;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                el.style.top = (el.offsetTop - pos2) + "px";
+                el.style.left = (el.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // --- Customer Logic ---
+        function renderCustomerTable() {
+            const tbody = document.querySelector('#customer-reg .data-table tbody');
+            const keyword = document.getElementById('cust-search').value.toLowerCase();
+            const filtered = DB.customers.filter(c => c.name.toLowerCase().includes(keyword) || c.id.toString().includes(keyword));
+
+            let html = filtered.map((c, i) => `
+                <tr onclick="loadCustomer('${c.id}')" style="cursor:pointer;">
+                    <td align="right" style="background:#f1f5f9; width:35px; color:#64748b;">${i + 1}</td>
+                    <td align="center">${c.id}</td>
+                    <td align="center">${c.type || '매출처'}</td>
+                    <td style="font-weight:bold; color:#0f172a;">${c.name}</td>
+                    <td>${c.bizNo}</td>
+                    <td>${c.boss || ''}</td>
+                    <td>${c.tel}</td>
+                    <td>${c.mobile || ''}</td>
+                    <td>${c.manager || ''}</td>
+                </tr>
+            `).join('');
+
+            // 빈 행 추가 (스크린샷처럼 칸을 채움)
+            const minRows = 25;
+            for (let i = filtered.length; i < minRows; i++) {
+                html += `<tr>
+                    <td align="right" style="background:#f1f5f9; color:#94a3b8;">${i + 1}</td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function loadCustomer(id) {
+            const c = DB.customers.find(item => item.id == id);
+            if (!c) return;
+            const form = document.querySelector('#customer-reg .form-container');
+            const fields = form.querySelectorAll('input, select');
+
+            fields[0].value = c.id;
+            fields[1].value = c.bizNo || '';
+            fields[2].value = c.boss || '';
+            fields[3].value = c.type || '매출처';
+            fields[4].value = c.bizType || '';
+            fields[5].value = c.tel || '';
+            fields[6].value = c.name || '';
+            fields[7].value = c.bizItem || '';
+            fields[8].value = c.mobile || '';
+            fields[9].value = c.manager || '';
+            fields[10].value = c.email || '';
+            fields[11].value = c.memo || '';
+            fields[12].value = c.address || '';
+        }
+
+        function deleteCustomer() {
+            const form = document.querySelector('#customer-reg .form-container');
+            const id = form.querySelector('input').value;
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            DB.customers = DB.customers.filter(c => c.id != id);
+            saveData();
+            renderCustomerTable();
+            newCustomer();
+        }
+
+        function newCustomer() {
+            const form = document.querySelector('#customer-reg .form-container');
+            const fields = form.querySelectorAll('input, select');
+            const ids = DB.customers.map(c => parseInt(c.id) || 0);
+            const nextId = Math.max(...ids, 1000) + 1;
+            fields[0].value = nextId;
+            for (let i = 1; i < fields.length; i++) fields[i].value = '';
+            fields[3].selectedIndex = 0;
+        }
+
+        function saveCustomer() {
+            const form = document.querySelector('#customer-reg .form-container');
+            const f = form.querySelectorAll('input, select');
+            const id = f[0].value;
+
+            const customerData = {
+                id: id,
+                bizNo: f[1].value,
+                boss: f[2].value,
+                type: f[3].value,
+                bizType: f[4].value,
+                tel: f[5].value,
+                name: f[6].value,
+                bizItem: f[7].value,
+                mobile: f[8].value,
+                manager: f[9].value,
+                email: f[10].value,
+                memo: f[11].value,
+                address: f[12].value
+            };
+
+            const idx = DB.customers.findIndex(c => c.id == id);
+            if (idx > -1) DB.customers[idx] = customerData;
+            else DB.customers.push(customerData);
+
+            saveData();
+            renderCustomerTable();
+            newCustomer();
+            alert('저장되었습니다.');
+        }
+
+        // --- Product Logic ---
+        function renderProductTable() {
+            const tbody = document.querySelector('#product-reg .data-table tbody');
+            const keyword = document.getElementById('prod-search').value.toLowerCase();
+            const filtered = DB.products.filter(p => p.name.toLowerCase().includes(keyword) || p.id.toString().includes(keyword));
+
+            let html = filtered.map((p, i) => `
+                <tr onclick="loadProduct('${p.id}')" style="cursor:pointer;">
+                    <td align="right" style="background:#f1f5f9; width:35px; color:#64748b;">${i + 1}</td>
+                    <td>${p.id}</td>
+                    <td style="font-weight:bold; color:#0f172a;">${p.name}</td>
+                    <td align="right" style="color:#ef4444;">${(p.buyPrice || 0).toLocaleString()}</td>
+                    <td align="right" style="color:#3b82f6;">${(p.sellPrice || 0).toLocaleString()}</td>
+                    <td>${p.cate1 || '-'}</td>
+                    <td>${p.subCate1 || '-'}</td>
+                    <td align="center">${p.stock || 0}</td>
+                </tr>
+            `).join('');
+
+            const minRows = 25;
+            for (let i = filtered.length; i < minRows; i++) {
+                html += `<tr>
+                    <td align="right" style="background:#f1f5f9; color:#94a3b8;">${i + 1}</td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function loadProduct(id) {
+            const p = DB.products.find(item => item.id == id);
+            if (!p) return;
+            const form = document.querySelector('#product-reg .form-container');
+            const f = form.querySelectorAll('input, select');
+
+            f[0].value = p.id;
+            f[1].value = p.buyPrice || 0;
+            f[2].value = p.name || '';
+            f[3].value = p.sellPrice || 0;
+            f[4].value = p.cate1 || '대분류 1';
+            f[5].value = p.subCate1 || '소분류 1';
+            f[6].value = p.stock || 0;
+            f[7].value = p.priceA || 0;
+            f[8].value = p.memo || '';
+        }
+
+        function deleteProduct() {
+            const form = document.querySelector('#product-reg .form-container');
+            const id = form.querySelector('input').value;
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            DB.products = DB.products.filter(p => p.id != id);
+            saveData();
+            renderProductTable();
+            newProduct();
+        }
+
+        function newProduct() {
+            const form = document.querySelector('#product-reg .form-container');
+            const fields = form.querySelectorAll('input, select');
+            const ids = DB.products.map(p => parseInt(p.id) || 0);
+            const nextId = Math.max(...ids, 1000) + 1;
+
+            fields.forEach(f => f.value = '');
+            fields[0].value = nextId;
+            fields[2].value = '';
+            fields[4].value = '대분류 1';
+            fields[5].value = '소분류 1';
+        }
+
+        function saveProduct() {
+            const form = document.querySelector('#product-reg .form-container');
+            const f = form.querySelectorAll('input, select');
+            const id = f[0].value;
+            const productData = {
+                id: id,
+                buyPrice: parseInt(f[1].value) || 0,
+                name: f[2].value,
+                sellPrice: parseInt(f[3].value) || 0,
+                cate1: f[4].value,
+                subCate1: f[5].value,
+                stock: parseInt(f[6].value) || 0,
+                priceA: parseInt(f[7].value) || 0,
+                memo: f[8].value
+            };
+
+            const idx = DB.products.findIndex(p => p.id == id);
+            if (idx > -1) DB.products[idx] = productData;
+            else DB.products.push(productData);
+
+            saveData();
+            renderProductTable();
+            newProduct();
+            alert('저장되었습니다.');
+        }
+
+        // --- Transaction Logic (Sales/Purchase) ---
+        function switchTradeType(type) {
+            const title = document.getElementById('reg-title');
+            const targetLabel = document.getElementById('target-label');
+            const totalLabel = document.getElementById('total-label');
+            const select = document.getElementById('trade-type-select');
+            select.value = type;
+            if (type === 'sales') {
+                title.innerText = '매출 등록'; targetLabel.innerText = '매출거래처'; totalLabel.innerText = '매출총액'; select.style.color = '#004d99';
+            } else {
+                title.innerText = '매입 등록'; targetLabel.innerText = '매입거래처'; totalLabel.innerText = '매입총액'; select.style.color = '#e81123';
+            }
+        }
+
+        function saveTransaction() {
+            const type = document.getElementById('trade-type-select').value;
+            const customerInput = document.querySelector('#sales-reg .form-container input');
+            const customer = customerInput ? customerInput.value : '';
+            const dateInput = document.querySelector('#sales-reg input[type="date"]');
+            const date = dateInput ? dateInput.value : '';
+
+            const rows = document.querySelectorAll('#sales-grid-body tr');
+            rows.forEach(row => {
+                const pname = row.querySelector('.input-pname')?.value;
+                const qty = parseInt(row.querySelector('.input-qty')?.value) || 0;
+                const price = parseInt(row.querySelector('.input-price')?.value) || 0;
+
+                if (pname && qty > 0) {
+                    DB.transactions.push({
+                        date, type, customer, pname, qty, price,
+                        supply: qty * price,
+                        tax: Math.floor(qty * price * 0.1)
+                    });
+                }
+            });
+            saveData();
+            alert('전표가 저장되었습니다.');
+            updateTotals();
+        }
+
+        // --- Inquiry Logic ---
+        function renderInquiryTable() {
+            const tbody = document.querySelector('#complex-inquiry .data-table tbody');
+            if (DB.transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" align="center">조회된 내역이 없습니다.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = DB.transactions.map(t => `
+                <tr>
+                    <td align="center">${t.date}</td>
+                    <td>${t.customer}</td>
+                    <td align="right">-</td>
+                    <td align="right">${t.qty}</td>
+                    <td align="right">${t.price.toLocaleString()}</td>
+                    <td align="right">${(t.supply + t.tax).toLocaleString()}</td>
+                    <td align="right">0</td>
+                    <td align="right">-</td>
+                </tr>
+            `).join('');
+        }
+
+        // --- Sales Logic ---
+        function renderSalesGrid() {
+            const tbody = document.getElementById('sales-grid-body');
+            if (!tbody) return;
+            let html = '';
+            const minRows = 25;
+
+            // 샘플 데이터 포함
+            html += `
+                <tr>
+                    <td align="right" style="background:#f1f5f9; color:#64748b; width:35px;">1</td>
+                    <td><input type="text" value="IP 카메라 400만 화소" class="input-pname"></td>
+                    <td><input type="number" value="10" class="input-qty"></td>
+                    <td><input type="number" value="85000" class="input-price"></td>
+                    <td align="right" class="cell-supply">850,000</td>
+                    <td align="right" class="cell-tax">85,000</td>
+                    <td><input type="text"></td>
+                </tr>
+            `;
+
+            for (let i = 1; i < minRows; i++) {
+                html += `
+                    <tr>
+                        <td align="right" style="background:#f1f5f9; color:#94a3b8;">${i + 1}</td>
+                        <td><input type="text"></td>
+                        <td><input type="number" class="input-qty"></td>
+                        <td><input type="number" class="input-price"></td>
+                        <td align="right" class="cell-supply"></td>
+                        <td align="right" class="cell-tax"></td>
+                        <td><input type="text"></td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        }
+
+        document.body.addEventListener('input', function (e) {
+            if (e.target.classList.contains('input-qty') || e.target.classList.contains('input-price')) {
+                const row = e.target.closest('tr');
+                const qty = parseFloat(row.querySelector('.input-qty').value) || 0;
+                const price = parseFloat(row.querySelector('.input-price').value) || 0;
+                const supply = qty * price;
+                const tax = Math.floor(supply * 0.1);
+                row.querySelector('.cell-supply').innerText = supply.toLocaleString();
+                row.querySelector('.cell-tax').innerText = tax.toLocaleString();
+                updateTotals();
+            }
+        });
+
+        function updateTotals() {
+            let totalSupply = 0; let totalTax = 0;
+            document.querySelectorAll('.cell-supply').forEach(td => {
+                totalSupply += parseFloat(td.innerText.replace(/,/g, '')) || 0;
+            });
+            document.querySelectorAll('.cell-tax').forEach(td => {
+                totalTax += parseFloat(td.innerText.replace(/,/g, '')) || 0;
+            });
+            document.getElementById('sum-supply').innerText = totalSupply.toLocaleString();
+            document.getElementById('sum-tax').innerText = totalTax.toLocaleString();
+            document.getElementById('sum-total').innerText = (totalSupply + totalTax).toLocaleString();
+        }
+
+        renderSalesGrid();
+        showWindow('sales-reg');
+        switchTradeType('sales');
+    </script>
+</body>
+
+</html>

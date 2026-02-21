@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(비즈테크) For BizTech Edition - Ver 0.0.1 (Classic)</title>
+    <link rel="stylesheet" href="style_v001.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <!-- System Info Bar -->
+    <header class="system-bar">
+        <div>
+            <strong>(비즈테크) For BizTech Edition Ver 0.0.1</strong> - 사용자: 관리자
+        </div>
+        <div>2026-02-04 (수요일) | 복원된 클래식 버전</div>
+    </header>
+
+    <!-- Main Menu Bar -->
+    <nav class="menu-bar">
+        <div class="menu-item">
+            파일(F)
+            <div class="dropdown-menu">
+                <div class="dropdown-item">로그인 / 로그아웃</div>
+                <div class="dropdown-item">비밀번호 변경</div>
+                <div class="dropdown-item" onclick="location.reload()">새로고침(F5)</div>
+                <div class="dropdown-item">종료</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            매입 & 매출관리(G)
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="showWindow('sales-reg'); switchTradeType('sales');">매출 등록</div>
+                <div class="dropdown-item" onclick="showWindow('sales-reg'); switchTradeType('purchase');">매입 등록</div>
+                <div class="dropdown-item">수금 등록(입금)</div>
+                <div class="dropdown-item">지급 등록(출금)</div>
+                <div class="dropdown-item">지출 결의서 작성</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            조회메뉴
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="showWindow('complex-inquiry')">거래처 기간별 매입/매출 조회</div>
+                <div class="dropdown-item">일반 매입/매출 현황</div>
+                <div class="dropdown-item">거래처 조회</div>
+                <div class="dropdown-item">기간별 재고현황</div>
+                <div class="dropdown-item">제품별 누적 재고현황</div>
+                <div class="dropdown-item">분류별 매입/매출 현황</div>
+                <div class="dropdown-item">담당자별 매입/매출 현황</div>
+                <div class="dropdown-item">거래처 제품별 매입/매출 현황</div>
+                <div class="dropdown-item">거래처 일자별 매입/매출 현황</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            조회메뉴 2
+            <div class="dropdown-menu">
+                <div class="dropdown-item">매입처 미지급 현황</div>
+                <div class="dropdown-item">매출처 미수금 현황</div>
+                <div class="dropdown-item">거래처 입출금 현황</div>
+                <div class="dropdown-item">월간 영업 캘린더</div>
+                <div class="dropdown-item">거래처 일별 집계</div>
+                <div class="dropdown-item">일일 거래마감 현황</div>
+                <div class="dropdown-item">현금시세 입력</div>
+                <div class="dropdown-item">지출전표 작성</div>
+                <div class="dropdown-item">세금계산서 작성 내역</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            기초자료 관리(C)
+            <div class="dropdown-menu">
+                <div class="dropdown-item" onclick="showWindow('company-reg')">사업체등록</div>
+                <div class="dropdown-item" onclick="showWindow('customer-reg')">거래처등록 / 조회</div>
+                <div class="dropdown-item" onclick="showWindow('product-reg')">제품등록 / 조회</div>
+                <div class="dropdown-item">기본정보등록</div>
+                <div class="dropdown-item" onclick="showWindow('settings-window')">환경설정</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            창(W)
+            <div class="dropdown-menu">
+                <div class="dropdown-item">모두 닫기</div>
+                <div class="dropdown-item">계단식 배열</div>
+            </div>
+        </div>
+        <div class="menu-item">온라인 원격제어</div>
+    </nav>
+
+    <main class="workspace">
+        <!-- 동일한 MDI Window 구조 유지 (Ver 0.0.1 스타일 바인딩) -->
+        <div id="customer-reg" class="erp-window" style="display: none;">
+            <div class="window-title-bar">
+                <i data-lucide="users" style="width: 14px; margin-right: 8px;"></i> 거래처 등록
+                <div class="window-controls">
+                    <div class="win-btn" onclick="minimizeWindow('customer-reg')">_</div>
+                    <div class="win-btn" onclick="maximizeWindow('customer-reg')">□</div>
+                    <div class="win-btn" onclick="hideWindow('customer-reg')"
+                        style="background: var(--danger); color: white;">×</div>
+                </div>
+            </div>
+            <div class="erp-toolbar">
+                <button class="tool-btn" onclick="newCustomer()"><i data-lucide="user-plus"></i> 신규</button>
+                <button class="tool-btn" onclick="deleteCustomer()"><i data-lucide="trash-2"></i> 삭제</button>
+                <button class="tool-btn" onclick="saveCustomer()" style="background: #e3f2fd;"><i
+                        data-lucide="save"></i> 저장</button>
+            </div>
+            <section class="form-container" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="input-row"><label>거래처코드</label><input type="text" readonly></div>
+                <div class="input-row"><label>사업자번호</label><input type="text"></div>
+                <div class="input-row"><label>대표자명</label><input type="text"></div>
+                <div class="input-row"><label>구분</label><select>
+                        <option>매출처</option>
+                        <option>매입처</option>
+                    </select></div>
+                <div class="input-row"><label>거래처명</label><input type="text"></div>
+                <div class="input-row"><label>전화번호</label><input type="text"></div>
+            </section>
+            <div class="data-grid-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>코드</th>
+                            <th>구분</th>
+                            <th>거래처명</th>
+                            <th>사업자번호</th>
+                            <th>대표자</th>
+                            <th>전화번호</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 제품 등록 Window (Ver 0.0.1용 단순화) -->
+        <div id="product-reg" class="erp-window" style="display: none;">
+            <div class="window-title-bar">
+                <i data-lucide="package" style="width: 14px; margin-right: 8px;"></i> 제품 등록 (Ver 0.0.1)
+                <div class="window-controls">
+                    <div class="win-btn" onclick="minimizeWindow('product-reg')">_</div>
+                    <div class="win-btn" onclick="maximizeWindow('product-reg')">□</div>
+                    <div class="win-btn" onclick="hideWindow('product-reg')"
+                        style="background: var(--danger); color: white;">×</div>
+                </div>
+            </div>
+            <div class="erp-toolbar">
+                <button class="tool-btn" onclick="newProduct()"><i data-lucide="plus-circle"></i> 신규</button>
+                <button class="tool-btn" onclick="saveProduct()"><i data-lucide="save"></i> 저장</button>
+                <div style="margin-left: auto; display: flex; align-items: center; gap: 5px;">
+                    <input type="text" id="prod-search" placeholder="검색..." oninput="renderProductTable()"
+                        style="border:1px solid #ccc;">
+                </div>
+            </div>
+            <section class="form-container" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="input-row"><label>제품코드</label><input type="text" readonly></div>
+                <div class="input-row"><label>매입단가</label><input type="number"></div>
+                <div class="input-row"><label>제품명</label><input type="text"></div>
+                <div class="input-row"><label>매출단가</label><input type="number"></div>
+                <div class="input-row"><label>대분류</label><select>
+                        <option>대분류 1</option>
+                        <option>대분류 2</option>
+                    </select></div>
+                <div class="input-row"><label>소분류</label><select>
+                        <option>소분류 1</option>
+                        <option>소분류 2</option>
+                    </select></div>
+            </section>
+            <div class="data-grid-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>코드</th>
+                            <th>제품명</th>
+                            <th>매입가</th>
+                            <th>매출가</th>
+                            <th>대분류</th>
+                            <th>소분류</th>
+                            <th>재고</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 매출 등록 Window -->
+        <div id="sales-reg" class="erp-window" style="display: none;">
+            <div class="window-title-bar"><i data-lucide="shopping-cart"></i> 매출/매입 등록</div>
+            <div class="erp-toolbar"><button class="tool-btn" onclick="saveTransaction()">저장</button></div>
+            <section class="form-container">
+                <div class="input-row"><label>거래처</label><input type="text"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="taskbar" id="taskbar"></footer>
+
+    <script>
+        lucide.createIcons();
+        const DB = {
+            customers: JSON.parse(localStorage.getItem('erp_customers')) || [],
+            products: JSON.parse(localStorage.getItem('erp_products')) || [],
+            transactions: JSON.parse(localStorage.getItem('erp_transactions')) || []
+        };
+        function saveData() {
+            localStorage.setItem('erp_customers', JSON.stringify(DB.customers));
+            localStorage.setItem('erp_products', JSON.stringify(DB.products));
+            localStorage.setItem('erp_transactions', JSON.stringify(DB.transactions));
+        }
+
+        let zIndex = 100; let winCount = 0;
+        function showWindow(id) {
+            const win = document.getElementById(id);
+            if (win.style.display !== 'flex') {
+                winCount++;
+                win.style.display = 'flex';
+                win.style.top = (20 + (winCount % 10) * 30) + "px";
+                win.style.left = "20px";
+                makeDraggable(win);
+            }
+            win.style.zIndex = ++zIndex;
+            if (id === 'customer-reg') renderCustomerTable();
+            if (id === 'product-reg') renderProductTable();
+        }
+        function minimizeWindow(id) { document.getElementById(id).style.display = 'none'; /* 단순화 */ }
+        function maximizeWindow(id) { document.getElementById(id).classList.toggle('maximized'); }
+        function hideWindow(id) { document.getElementById(id).style.display = 'none'; }
+
+        function makeDraggable(el) {
+            const header = el.querySelector('.window-title-bar');
+            let p1 = 0, p2 = 0, p3 = 0, p4 = 0;
+            header.onmousedown = (e) => {
+                p3 = e.clientX; p4 = e.clientY;
+                document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
+                document.onmousemove = (e) => {
+                    p1 = p3 - e.clientX; p2 = p4 - e.clientY;
+                    p3 = e.clientX; p4 = e.clientY;
+                    el.style.top = (el.offsetTop - p2) + "px";
+                    el.style.left = (el.offsetLeft - p1) + "px";
+                };
+            };
+        }
+
+        function renderProductTable() {
+            const tbody = document.querySelector('#product-reg .data-table tbody');
+            tbody.innerHTML = DB.products.map(p => `
+                <tr onclick="loadProduct('${p.id}')">
+                    <td>${p.id}</td><td>${p.name}</td><td>${p.buyPrice}</td><td>${p.sellPrice}</td>
+                    <td>${p.cate1}</td><td>${p.subCate1}</td><td>${p.stock}</td>
+                </tr>
+            `).join('');
+        }
+        function loadProduct(id) {
+            const p = DB.products.find(item => item.id == id);
+            const f = document.querySelectorAll('#product-reg input, #product-reg select');
+            f[1].value = p.id; f[2].value = p.buyPrice; f[3].value = p.name; f[4].value = p.sellPrice;
+            f[5].value = p.cate1; f[6].value = p.subCate1;
+        }
+        function saveProduct() { alert('V0.0.1 백업 모드에서는 조구조 확인만 권장합니다.'); }
+
+        function renderCustomerTable() {
+            const tbody = document.querySelector('#customer-reg .data-table tbody');
+            tbody.innerHTML = DB.customers.map(c => `<tr><td>${c.id}</td><td>${c.type}</td><td>${c.name}</td><td>${c.bizNo}</td><td>${c.boss}</td><td>${c.tel}</td></tr>`).join('');
+        }
+
+        showWindow('product-reg');
+    </script>
+</body>
+
+</html>

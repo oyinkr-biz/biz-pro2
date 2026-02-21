@@ -1,0 +1,133 @@
+<!-- 5. 거래처 기간별 매입/매출 조회 (스크린샷 기반 신규 구현) -->
+<div id="complex-inquiry" class="erp-window" style="display: none; width: 1250px; height: 850px;">
+    <div class="window-title-bar">
+        <i data-lucide="search" style="width: 14px; margin-right: 8px;"></i> 거래처 기간별 매입/매출 조회
+        <div class="window-controls">
+            <div class="win-btn" onclick="minimizeWindow('complex-inquiry')">_</div>
+            <div class="win-btn" onclick="maximizeWindow('complex-inquiry')">□</div>
+            <div class="win-btn close-btn" onclick="hideWindow('complex-inquiry')"
+                style="background: var(--accent-error); color: white;">×</div>
+        </div>
+    </div>
+
+    <div class="erp-toolbar">
+        <button class="tool-btn" onclick="renderInquiryTable()"><i data-lucide="search"></i> 조회(F2)</button>
+        <button class="tool-btn"><i data-lucide="printer"></i> 출력(F11)</button>
+        <button class="tool-btn"><i data-lucide="file-spreadsheet"></i> 엑셀변환(F12)</button>
+        <div style="flex:1;"></div>
+        <button class="tool-btn" onclick="hideWindow('complex-inquiry')"><i data-lucide="x-circle"></i> 종료(F10)</button>
+    </div>
+
+    <!-- Dense Search Panel (Based on user screenshot orange box) -->
+    <div style="background: #e2e8f0; padding: 10px; border-bottom: 2px solid #cbd5e1;">
+        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
+            <!-- Row 1 -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 60px; text-align: right;">거래일자</label>
+                    <input type="date" value="2026-02-01" style="padding: 2px; border: 1px solid #aaa;">
+                    <span>~</span>
+                    <input type="date" value="2026-02-04" style="padding: 2px; border: 1px solid #aaa;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 70px; text-align: right;">거래처구분</label>
+                    <select style="width: 120px; padding: 2px; border: 1px solid #aaa;">
+                        <option></option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 60px; text-align: right;">거래구분</label>
+                    <select style="width: 80px; padding: 2px; border: 1px solid #aaa;">
+                        <option>매출</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 70px; text-align: right;">거래처조건</label>
+                    <select style="width: 100px; padding: 2px; border: 1px solid #aaa;">
+                        <option>매출거래처</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px; flex: 1;">
+                    <label style="font-weight: bold; width: 50px; text-align: right;">거래처</label>
+                    <input type="text" style="flex: 1; min-width: 100px; padding: 2px; border: 1px solid #aaa;">
+                    <button style="padding: 1px 6px; font-size: 10px;">▼</button>
+                </div>
+            </div>
+            <!-- Row 2 -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 60px; text-align: right;">조회구분</label>
+                    <select style="width: 160px; padding: 2px; border: 1px solid #aaa;">
+                        <option>1 단계</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 40px; text-align: right;">담당</label>
+                    <input type="text" style="width: 80px; padding: 2px; border: 1px solid #aaa;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 50px; text-align: right;">제품코드</label>
+                    <input type="text" style="width: 80px; padding: 2px; border: 1px solid #aaa;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 50px; text-align: right;">제품명</label>
+                    <input type="text" style="width: 120px; padding: 2px; border: 1px solid #aaa;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px; margin-left: auto;">
+                    <label style="font-weight: bold; width: 60px; text-align: right;">정렬조건</label>
+                    <select style="width: 120px; padding: 2px; border: 1px solid #aaa;">
+                        <option>거래처 코드로 정렬</option>
+                    </select>
+                    <select style="width: 60px; padding: 2px; border: 1px solid #aaa;">
+                        <option>오름</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Row 3 -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 60px; text-align: right;">할인금액</label>
+                    <select style="width: 160px; padding: 2px; border: 1px solid #aaa;">
+                        <option>할인금액 미포함</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; width: 40px; text-align: right;">담당자</label>
+                    <select style="width: 80px; padding: 2px; border: 1px solid #aaa;">
+                        <option></option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px; margin-left: auto;">
+                    <label style="font-weight: bold; width: 70px; text-align: right;">리포트 하단</label>
+                    <select style="width: 100px; padding: 2px; border: 1px solid #aaa;">
+                        <option>미출력</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inquiry Table Area -->
+    <div class="data-grid-container" style="flex: 1; border: none; margin: 0;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 30px; background: #334155; color: white;"></th>
+                    <th style="width: 100px;">거래일자</th>
+                    <th style="width: 180px;">거래처명</th>
+                    <th style="width: 100px;">전일잔액</th>
+                    <th style="width: 80px;">매출수량</th>
+                    <th style="width: 100px;">단가</th>
+                    <th style="width: 100px;">총금액</th>
+                    <th style="width: 100px;">반품(할인)</th>
+                    <th style="width: 100px;">총금액</th>
+                    <th style="width: 100px;">입금금액</th>
+                    <th style="width: 120px;">잔액</th>
+                </tr>
+            </thead>
+            <tbody id="complex-inquiry-body">
+                <!-- Content will be rendered here -->
+            </tbody>
+        </table>
+    </div>
+</div>
